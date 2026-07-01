@@ -4,341 +4,406 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carhaus CRM · Alexander Calle</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#080f1e;
-  --surface:#0d1628;
-  --surface2:#111d35;
-  --border:#1a2844;
-  --vw:#001e50;
-  --vw2:#003399;
-  --accent:#00b0f0;
-  --gold:#c8a84c;
-  --text:#e8edf5;
-  --muted:#6b7fa3;
-  --red:#e53935;
-  --orange:#ff6f00;
-  --green:#00c853;
-  --yellow:#ffd600;
-  --sidebar:240px;
+  --bg:#f8f9fa;--white:#ffffff;--border:#e2e6ea;--border2:#d0d5dd;
+  --navy:#1a2744;--navy2:#243560;--navy3:#0f1a30;
+  --red:#c0392b;--red-bg:#fdf2f2;--red-border:#f5c6cb;
+  --green:#1a7a4a;--green-bg:#f0faf4;
+  --orange:#c96b00;--orange-bg:#fff8ee;
+  --blue:#1a5faa;--blue-bg:#eff5ff;
+  --gold:#a07830;--gold-bg:#fdf8ee;
+  --purple:#6d3faa;--purple-bg:#f5f0ff;
+  --text:#1a2033;--text2:#4a5568;--text3:#8a94a6;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow2:0 4px 16px rgba(0,0,0,.1);
+  --r:6px;--r2:4px;
 }
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
 
-.sidebar{width:var(--sidebar);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:10}
-.sb-logo{padding:24px 20px 20px;border-bottom:1px solid var(--border)}
-.brand{font-size:20px;font-weight:700;letter-spacing:.5px;color:#fff}
-.sub{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:2px}
-.sb-vw{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.vw-badge{width:32px;height:32px;background:var(--vw2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff}
-nav{flex:1;padding:12px 0;overflow-y:auto}
-.nav-section{padding:8px 16px 4px;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px}
-.ni{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;border-radius:6px;margin:1px 8px;font-size:13.5px;font-weight:500;color:var(--muted);transition:all .15s}
-.ni:hover{background:var(--surface2);color:var(--text)}
-.ni.active{background:rgba(0,51,153,.25);color:var(--accent);border-left:3px solid var(--accent);margin-left:5px}
-.ni svg{width:16px;height:16px;flex-shrink:0}
-.ni .badge-nav{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px}
-.sb-user{padding:16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.sb-avatar{width:34px;height:34px;border-radius:50%;background:var(--vw2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
-.sb-info{flex:1;min-width:0}
-.sb-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sb-role{font-size:11px;color:var(--muted)}
+/* TOPBAR */
+#topbar{height:60px;background:var(--white);border-bottom:2px solid var(--navy);display:flex;align-items:center;padding:0 24px;gap:20px;flex-shrink:0;box-shadow:var(--shadow);z-index:100;}
+.tb-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--navy3);letter-spacing:2px;white-space:nowrap;}
+.tb-logo span{font-size:9px;font-weight:400;color:var(--text3);display:block;letter-spacing:3px;text-transform:uppercase;font-family:'Inter',sans-serif;margin-top:1px;}
+.tb-divider{width:1px;height:32px;background:var(--border);flex-shrink:0;}
+.tb-title{font-size:15px;font-weight:600;color:var(--text);flex:1;}
+.tb-date{font-size:12px;color:var(--text3);white-space:nowrap;}
+.tb-user{display:flex;align-items:center;gap:10px;}
+.tb-avatar{width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tb-uname{text-align:right;}<br>.tb-uname strong{display:block;font-size:12px;font-weight:600;color:var(--text);}
+.tb-uname span{font-size:11px;color:var(--text3);}
 
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.topbar{height:56px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;flex-shrink:0}
-.page-title{font-size:18px;font-weight:600;flex:1}
-.topbar-date{font-size:12px;color:var(--muted)}
-.topbar-notif{width:34px;height:34px;background:var(--surface2);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
-.notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--surface)}
-.content{flex:1;overflow-y:auto;padding:24px}
+/* LAYOUT */
+#layout{display:flex;flex:1;overflow:hidden;}
 
-.pain-alert{background:linear-gradient(135deg,rgba(229,57,53,.12),rgba(255,111,0,.08));border:1px solid rgba(229,57,53,.45);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:16px;margin-bottom:24px;cursor:pointer;transition:border-color .2s}
-.pain-alert:hover{border-color:rgba(229,57,53,.8)}
-.pa-icon{font-size:22px;flex-shrink:0}
-.pa-text{flex:1}
-.pa-title{font-size:14px;font-weight:600;color:#ff6b6b;margin-bottom:2px}
-.pa-sub{font-size:12px;color:var(--muted)}
-.pa-value{font-size:20px;font-weight:700;color:var(--orange);white-space:nowrap}
-.pa-cta{background:var(--red);color:#fff;font-size:12px;font-weight:600;padding:8px 14px;border-radius:6px;white-space:nowrap;flex-shrink:0}
+/* SIDEBAR */
+#sidebar{width:230px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;}
+.sb-section{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);padding:18px 16px 6px;}
+.ni{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);margin:1px 8px;border-radius:var(--r2);transition:all .15s;}
+.ni:hover{background:var(--bg);color:var(--text);}
+.ni.active{background:var(--navy);color:#fff;}
+.ni.active svg{stroke:#fff!important;}
+.ni svg{stroke:var(--text3);flex-shrink:0;}
+.ni .nbadge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;}
+.ni.active .nbadge{background:rgba(255,255,255,.25);}
+.sb-bottom{margin-top:auto;border-top:1px solid var(--border);padding:12px 14px;}
+.sb-user{display:flex;align-items:center;gap:10px;}
+.sb-uav{width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sb-uname{font-size:12px;font-weight:600;color:var(--text);}
+.sb-urole{font-size:11px;color:var(--text3);}
+.sb-brand{text-align:center;padding:8px 0 0;font-size:10px;color:var(--text3);letter-spacing:.3px;}
+.sb-brand b{color:var(--gold);}
 
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-.kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px}
-.kpi-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
-.kpi-val{font-size:28px;font-weight:700;color:#fff;line-height:1}
-.kpi-sub{font-size:11px;margin-top:6px}
-.kpi-up{color:var(--green)}
-.kpi-dn{color:var(--red)}
+/* CONTENT */
+#content{flex:1;overflow-y:auto;padding:24px 28px;}
+.page{display:none;}
+.page.active{display:block;}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:16px;}
+.ph h1{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--navy3);}
+.ph p{font-size:13px;color:var(--text3);margin-top:3px;}
+.ph-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;}
 
-.two-col{display:grid;grid-template-columns:1fr 320px;gap:16px;margin-bottom:24px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px}
-.card-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.card-link{font-size:11px;font-weight:500;color:var(--accent);text-transform:none;letter-spacing:0;cursor:pointer}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r2);font-size:13px;font-weight:500;cursor:pointer;border:1px solid transparent;font-family:'Inter',sans-serif;transition:all .15s;}
+.btn-navy{background:var(--navy);color:#fff;border-color:var(--navy);}
+.btn-navy:hover{background:var(--navy2);}
+.btn-outline{background:var(--white);color:var(--text);border-color:var(--border2);}
+.btn-outline:hover{background:var(--bg);}
+.btn-sm{padding:6px 14px;font-size:12px;}
+.btn-xs{padding:4px 10px;font-size:11px;}
 
-.act-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
-.act-item:last-child{border-bottom:none}
-.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.act-text{font-size:13px;flex:1;line-height:1.4}
-.act-text strong{color:#fff}
-.act-time{font-size:11px;color:var(--muted);white-space:nowrap}
+/* ALERT BANNER */
+.alert-banner{background:var(--red-bg);border:1px solid var(--red-border);border-left:4px solid var(--red);border-radius:var(--r);padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.ab-content{display:flex;align-items:center;gap:14px;}
+.ab-icon{font-size:20px;flex-shrink:0;}
+.ab-text strong{display:block;font-size:14px;font-weight:700;color:var(--red);margin-bottom:3px;}
+.ab-text p{font-size:12px;color:#7b1d1d;}
+.btn-red{background:var(--red);color:#fff;border:none;padding:8px 18px;border-radius:var(--r2);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;}
+.btn-red:hover{background:#a93226;}
 
-.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.table-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.table-header h3{font-size:14px;font-weight:600;flex:1}
-.search-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:12px;color:var(--text);width:200px;outline:none;font-family:inherit}
-.search-box::placeholder{color:var(--muted)}
-.btn-add{background:var(--accent);color:#000;font-size:12px;font-weight:700;padding:8px 14px;border-radius:6px;cursor:pointer;border:none;font-family:inherit}
-table{width:100%;border-collapse:collapse}
-th{padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid var(--border);background:var(--surface2)}
-td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border)}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,.02)}
-.bdg{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
-.b-nuevo{background:rgba(0,176,240,.12);color:var(--accent)}
-.b-contactado{background:rgba(200,168,76,.12);color:var(--gold)}
-.b-testdrive{background:rgba(0,200,83,.12);color:var(--green)}
-.b-negociacion{background:rgba(255,214,0,.12);color:var(--yellow)}
-.b-perdido{background:rgba(229,57,53,.12);color:#ff6b6b}
-.dias-ok{color:var(--muted);font-size:12px}
-.dias-warn{color:var(--orange);font-size:12px;font-weight:600}
-.dias-red{color:var(--red);font-size:12px;font-weight:700}
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.kpi{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);border-top:3px solid var(--navy);}
+.kpi-label{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;}
+.kpi-value{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--navy3);line-height:1.1;}
+.kpi-sub{font-size:11px;color:var(--text3);margin-top:6px;}
+.kpi-sub .up{color:var(--green);font-weight:600;}
+.kpi-sub .dn{color:var(--red);font-weight:600;}
 
-.kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.kol{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.kol-head{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.kol-name{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px}
-.kol-count{margin-left:auto;font-size:11px;font-weight:700;background:var(--surface2);padding:2px 7px;border-radius:10px;color:var(--muted)}
-.kol-body{padding:10px;display:flex;flex-direction:column;gap:8px}
-.kcard{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;cursor:pointer;transition:border-color .15s}
-.kcard:hover{border-color:var(--accent)}
-.kcard-name{font-size:13px;font-weight:600;margin-bottom:3px}
-.kcard-model{font-size:11px;color:var(--muted);margin-bottom:8px}
-.kcard-bottom{display:flex;align-items:center;justify-content:space-between}
-.kcard-price{font-size:13px;font-weight:700;color:var(--accent)}
-.kcard-days{font-size:10px;color:var(--muted)}
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-bottom:20px;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;}
+.card-hdr{padding:13px 18px;border-bottom:1px solid var(--border);font-size:13px;font-weight:600;color:var(--text);background:var(--bg);}
+.card-body{padding:16px 18px;}
 
-.seg-list{display:flex;flex-direction:column;gap:10px}
-.seg-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:16px}
-.seg-date{width:52px;text-align:center;flex-shrink:0}
-.seg-day{font-size:22px;font-weight:700;line-height:1;color:#fff}
-.seg-month{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase}
-.seg-info{flex:1}
-.seg-name{font-size:14px;font-weight:600;margin-bottom:3px}
-.seg-action{font-size:12px;color:var(--muted);line-height:1.4}
-.seg-prio{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0}
-.p-alta{background:rgba(229,57,53,.15);color:#ff6b6b}
-.p-media{background:rgba(255,214,0,.12);color:var(--yellow)}
+/* ACTIVITY */
+.act-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.act-item:last-child{border-bottom:none;}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.dot-green{background:var(--green);}.dot-blue{background:var(--blue);}.dot-orange{background:var(--orange);}.dot-red{background:var(--red);}.dot-gray{background:var(--text3);}
+.act-text{font-size:12px;color:var(--text2);flex:1;line-height:1.5;}
+.act-time{font-size:11px;color:var(--text3);white-space:nowrap;}
 
-.entrega-list{display:flex;flex-direction:column;gap:10px}
-.entrega-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:16px}
-.e-icon{width:42px;height:42px;background:rgba(0,51,153,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.e-info{flex:1}
-.e-name{font-size:14px;font-weight:600}
-.e-model{font-size:12px;color:var(--muted)}
-.e-date{font-size:11px;color:var(--muted);margin-top:2px}
-.e-val{font-size:16px;font-weight:700;color:var(--green)}
+/* TABLES */
+.tcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px;}
+.tcard table{width:100%;border-collapse:collapse;}
+.tcard thead th{padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);background:var(--bg);border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;}
+.tcard tbody td{padding:11px 14px;font-size:13px;color:var(--text);border-bottom:1px solid var(--border);vertical-align:middle;}
+.tcard tbody tr:last-child td{border-bottom:none;}
+.tcard tbody tr:hover{background:#f8f9ff;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.b-nuevo{background:var(--blue-bg);color:var(--blue);}
+.b-contactado{background:var(--gold-bg);color:var(--gold);}
+.b-testdrive{background:var(--green-bg);color:var(--green);}
+.b-negociacion{background:var(--orange-bg);color:var(--orange);}
+.b-perdido{background:var(--red-bg);color:var(--red);}
+.b-disponible{background:var(--green-bg);color:var(--green);}
+.b-reservado{background:var(--orange-bg);color:var(--orange);}
+.b-vendido{background:#f1f3f5;color:var(--text3);}
+.b-activo{background:var(--green-bg);color:var(--green);}
+.b-vencida{background:var(--red-bg);color:var(--red);}
+.b-entregado{background:var(--purple-bg);color:var(--purple);}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.search-input{padding:7px 12px;border:1px solid var(--border2);border-radius:var(--r2);font-size:13px;font-family:'Inter',sans-serif;outline:none;width:200px;background:var(--white);}
+.search-input:focus{border-color:var(--navy);}
+.filter-btn{padding:5px 14px;border:1px solid var(--border);border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;background:var(--white);color:var(--text2);font-family:'Inter',sans-serif;transition:all .15s;}
+.filter-btn:hover,.filter-btn.act{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+/* KANBAN */
+.kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:start;}
+.kb-col{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.kb-col-hdr{padding:12px 14px;background:var(--white);border-bottom:2px solid var(--border);}
+.kb-col-hdr .kbc-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;}
+.kb-col-hdr .kbc-meta{font-size:11px;color:var(--text3);margin-top:2px;}
+.kb-cards{padding:10px;display:flex;flex-direction:column;gap:8px;min-height:80px;}
+.kb-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r2);padding:12px 14px;box-shadow:var(--shadow);transition:box-shadow .15s;}
+.kb-card:hover{box-shadow:var(--shadow2);}
+.kb-cname{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.kb-cmodel{font-size:12px;color:var(--text2);}
+.kb-cprice{font-size:14px;font-weight:700;margin-top:8px;}
+.kb-cdays{font-size:11px;color:var(--text3);margin-top:2px;}
+
+/* SEGUIMIENTOS */
+.seg-group{margin-bottom:22px;}
+.seg-ghdr{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--navy);display:inline-block;padding-right:24px;}
+.seg-item{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-bottom:8px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow);}
+.seg-date{text-align:center;min-width:46px;flex-shrink:0;}
+.seg-day{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--navy3);line-height:1;}
+.seg-mon{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);}
+.seg-div{width:1px;height:44px;background:var(--border);flex-shrink:0;}
+.seg-info{flex:1;}
+.seg-name{font-size:13px;font-weight:600;color:var(--text);}
+.seg-action{font-size:12px;color:var(--text2);margin-top:2px;}
+.seg-time{font-size:11px;color:var(--text3);margin-top:3px;}
+.prio{display:inline-flex;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:600;}
+.prio-alta{background:#ffeaea;color:var(--red);}
+.prio-media{background:var(--orange-bg);color:var(--orange);}
+.prio-baja{background:var(--green-bg);color:var(--green);}
+
+/* OBJETIVOS */
+.obj-hero{background:var(--white);border:1px solid var(--border);border-top:4px solid var(--navy);border-radius:var(--r);padding:22px 26px;margin-bottom:16px;box-shadow:var(--shadow);}
+.obj-hero h2{font-family:'Playfair Display',serif;font-size:18px;color:var(--navy3);margin-bottom:4px;}
+.obj-hero p{font-size:13px;color:var(--text2);}
+.obj-note{margin-top:14px;padding:10px 14px;background:var(--green-bg);border:1px solid #b7dfc9;border-radius:var(--r2);font-size:13px;color:var(--green);font-weight:500;}
+.obj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;}
+.obj-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;box-shadow:var(--shadow);}
+.obj-card-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:10px;}
+.obj-nums{display:flex;align-items:baseline;gap:6px;margin-bottom:10px;}
+.obj-cur{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--navy3);}
+.obj-tot{font-size:13px;color:var(--text3);}
+.obj-bar{height:10px;background:var(--border);border-radius:5px;overflow:hidden;margin-bottom:6px;}
+.obj-fill{height:100%;border-radius:5px;background:var(--navy);}
+.obj-pct{font-size:12px;color:var(--text3);}
+
+/* INVENTARIO */
+.inv-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;}
+.inv-stat{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);}
+.inv-stat-val{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--navy3);}
+.inv-stat-label{font-size:11px;color:var(--text3);margin-top:2px;}
+
+/* CLIENTES */
+.cli-footer{background:var(--navy);color:#fff;padding:14px 18px;border-radius:0 0 var(--r) var(--r);display:flex;justify-content:space-between;align-items:center;}
+.cli-footer-label{font-size:12px;opacity:.7;}
+.cli-footer-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;}
+
+/* DIAS */
+.d-ok{color:var(--text3);}
+.d-warn{color:var(--orange);font-weight:600;}
+.d-danger{color:var(--red);font-weight:700;}
 
 /* TOUR */
-.tour-overlay{position:fixed;inset:0;z-index:1000;display:none}
-.tour-overlay.active{display:block}
-.tour-dim{position:absolute;inset:0;background:rgba(0,0,0,.78);pointer-events:all}
-.tour-spotlight{position:absolute;background:transparent;box-shadow:0 0 0 9999px rgba(0,0,0,.78);border-radius:10px;transition:all .35s cubic-bezier(.4,0,.2,1);z-index:1001;pointer-events:none}
-.tour-box{position:absolute;background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:22px;width:340px;z-index:1002;pointer-events:all;box-shadow:0 24px 64px rgba(0,0,0,.6)}
-.tour-step-lbl{font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
-.tour-ttl{font-size:17px;font-weight:700;margin-bottom:8px;color:#fff}
-.tour-dsc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px}
-.tour-btns{display:flex;align-items:center;gap:10px}
-.btn-skip{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit;margin-right:auto}
-.btn-prev{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:13px;font-weight:500;padding:8px 16px;border-radius:6px;cursor:pointer;font-family:inherit}
-.btn-next-t{background:var(--accent);border:none;color:#000;font-size:13px;font-weight:700;padding:8px 18px;border-radius:6px;cursor:pointer;font-family:inherit}
+#tour-overlay{position:fixed;inset:0;z-index:9000;pointer-events:none;display:none;}
+#tour-overlay.active{display:block;pointer-events:all;}
+#tour-spotlight{position:absolute;border-radius:var(--r);transition:all .3s ease;}
+#tour-box{position:absolute;background:var(--white);border:1px solid var(--border);border-top:3px solid var(--navy);border-radius:var(--r);padding:22px 26px;width:330px;box-shadow:var(--shadow2);z-index:9001;}
+.t-step{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
+.t-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--navy3);margin-bottom:8px;}
+.t-desc{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:18px;}
+.t-actions{display:flex;align-items:center;justify-content:space-between;}
+.t-skip{font-size:12px;color:var(--text3);cursor:pointer;text-decoration:underline;}
 
-.page{display:none}
-.page.active{display:block}
-
-@media(max-width:900px){
-  .kpi-grid{grid-template-columns:repeat(2,1fr)}
-  .two-col{grid-template-columns:1fr}
-  .kanban{grid-template-columns:repeat(2,1fr)}
-  .pain-alert{flex-wrap:wrap;gap:10px}
-  .pa-value{font-size:16px}
-}
+@media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(2,1fr);}.kanban{grid-template-columns:repeat(2,1fr);}.obj-grid{grid-template-columns:1fr 1fr;}.inv-summary{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){#sidebar{display:none;}.kpi-grid{grid-template-columns:1fr 1fr;}.two-col{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-
-<div class="sidebar">
-  <div class="sb-logo">
-    <div class="sb-vw">
-      <div class="vw-badge">VW</div>
-      <div>
-        <div class="brand">CARHAUS</div>
-        <div class="sub">Sales CRM</div>
-      </div>
-    </div>
+<div id="topbar">
+  <div class="tb-logo">CARHAUS<span>VW Concesionario Oficial</span></div>
+  <div class="tb-divider"></div>
+  <div class="tb-title" id="tb-title">Dashboard</div>
+  <div class="tb-date" id="tb-date"></div>
+  <div class="tb-user">
+    <div class="tb-uname"><strong>Alexander Calle</strong><span>Asesor Comercial</span></div>
+    <div class="tb-avatar">AC</div>
   </div>
-  <nav>
-    <div class="nav-section">Principal</div>
-    <div class="ni active" data-page="dashboard" onclick="goNav('dashboard',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      Dashboard
-    </div>
-    <div class="nav-section">Ventas</div>
-    <div class="ni" data-page="leads" onclick="goNav('leads',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Leads
-      <span class="badge-nav">4</span>
-    </div>
-    <div class="ni" data-page="pipeline" onclick="goNav('pipeline',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      Pipeline
-    </div>
-    <div class="nav-section">Gestión</div>
-    <div class="ni" data-page="seguimientos" onclick="goNav('seguimientos',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Seguimientos
-    </div>
-    <div class="ni" data-page="entregas" onclick="goNav('entregas',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      Entregas
-    </div>
-  </nav>
-  <div class="sb-user">
-    <div class="sb-avatar">AC</div>
-    <div class="sb-info">
-      <div class="sb-name">Alexander Calle</div>
-      <div class="sb-role">Asesor Comercial · VW Carhaus</div>
+</div>
+
+<div id="layout">
+<div id="sidebar">
+  <div class="sb-section">Principal</div>
+  <div class="ni active" data-page="dashboard" onclick="nav('dashboard',this)">
+    <svg width="15" height="15" fill="none" stroke="var(--text3)" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </div>
+  <div class="sb-section">Ventas</div>
+  <div class="ni" data-page="leads" onclick="nav('leads',this)">
+    <svg width="15" height="15" fill="none" stroke="var(--text3)" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path stroke-linecap="round" stroke-linejoin="round" d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"/></svg>
+    Leads <span class="nbadge">4</span>
+  </div>
+  <div class="ni" data-page="pipeline" onclick="nav('pipeline',this)">
+    <svg width="15" height="15" fill="none" stroke="var(--text3)" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+    Pipeline
+  </div>
+  <div class="sb-section">Gestión</div>
+  <div class="ni" data-page="clientes" onclick="nav('clientes',this)">
+    <svg width="15" height="15" fill="none" stroke="var(--text3)" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+    Clientes
+  </div>
+  <div class="ni" data-page="inventario" onclick="nav('inventario',this)">
+    <svg width="15" height="15" fill="none" stroke="var(--text3)" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM6 12h.01M10 12h.01M14 12h.01M18 12h.01"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 7V5a2 2 0 012-2h10a2 2 0 012 2v2"/></svg>
+    Inventario
+  </div>
+  <div class="ni" data-page="seguimientos" onclick="nav('seguimientos',this)">
+    <svg width="15" height="15" fill="none" stroke="var(--text3)" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Seguimientos
+  </div>
+  <div class="ni" data-page="objetivos" onclick="nav('objetivos',this)">
+    <svg width="15" height="15" fill="none" stroke="var(--text3)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+    Objetivos
+  </div>
+  <div class="sb-brand">Desarrollado por <b>Airmate</b></div>
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-uav">AC</div>
+      <div><div class="sb-uname">Alexander Calle</div><div class="sb-urole">Asesor Comercial</div></div>
     </div>
   </div>
 </div>
 
-<div class="main">
-  <div class="topbar">
-    <div class="page-title" id="page-title">Dashboard</div>
-    <div class="topbar-date">martes, 1 de julio de 2026</div>
-    <div class="topbar-notif">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      <div class="notif-dot"></div>
+<div id="content">
+
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+  <div class="ph"><div><h1>Dashboard</h1><p>Resumen de actividad · VW Carhaus</p></div></div>
+  <div class="alert-banner" id="pain-alert">
+    <div class="ab-content">
+      <div class="ab-icon">⚠️</div>
+      <div class="ab-text">
+        <strong>4 leads llevan más de 7 días sin seguimiento</strong>
+        <p>Riesgo estimado: 148.000 € en ventas que puedes estar perdiendo ahora mismo</p>
+      </div>
     </div>
+    <button class="btn-red" onclick="nav('leads',document.querySelector('[data-page=leads]'))">Ver leads →</button>
   </div>
-
-  <div class="content">
-
-    <div class="page active" id="page-dashboard">
-      <div class="pain-alert" id="pain-banner" onclick="goNav('leads',document.querySelector('[data-page=leads]'))">
-        <div class="pa-icon">⚠️</div>
-        <div class="pa-text">
-          <div class="pa-title">4 leads sin seguimiento llevan más de 7 días sin contacto</div>
-          <div class="pa-sub">Valor estimado en riesgo · actúa hoy antes de que elijan a la competencia</div>
-        </div>
-        <div class="pa-value">148.000 €</div>
-        <div class="pa-cta">Ver leads →</div>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi">
-          <div class="kpi-label">Leads este mes</div>
-          <div class="kpi-val">23</div>
-          <div class="kpi-sub kpi-up">↑ +4 vs mes anterior</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Tasa de conversión</div>
-          <div class="kpi-val">17<span style="font-size:16px">%</span></div>
-          <div class="kpi-sub kpi-dn">↓ −2% vs mes anterior</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Valor pipeline</div>
-          <div class="kpi-val" style="font-size:22px">847.000 €</div>
-          <div class="kpi-sub kpi-up">23 oportunidades activas</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Test Drives</div>
-          <div class="kpi-val">11</div>
-          <div class="kpi-sub" style="color:var(--muted)">este mes · 3 pendientes</div>
-        </div>
-      </div>
-
-      <div class="two-col">
-        <div class="card">
-          <div class="card-title">Leads por semana <span class="card-link">Ver detalle →</span></div>
-          <canvas id="chart-leads" height="130"></canvas>
-        </div>
-        <div class="card">
-          <div class="card-title">Actividad reciente</div>
-          <div class="act-item">
-            <div class="act-dot" style="background:var(--green)"></div>
-            <div class="act-text"><strong>Pedro Martínez</strong> agendó test drive del Tiguan Allspace</div>
-            <div class="act-time">35m</div>
-          </div>
-          <div class="act-item">
-            <div class="act-dot" style="background:var(--accent)"></div>
-            <div class="act-text"><strong>Nuevo lead</strong> entró desde web: interesado en Golf 8</div>
-            <div class="act-time">1h</div>
-          </div>
-          <div class="act-item">
-            <div class="act-dot" style="background:var(--red)"></div>
-            <div class="act-text"><strong>Alerta:</strong> Cristina Vega · 9 días sin contacto (Touareg)</div>
-            <div class="act-time">hoy</div>
-          </div>
-          <div class="act-item">
-            <div class="act-dot" style="background:var(--gold)"></div>
-            <div class="act-text"><strong>Laura Soler</strong> firmó contrato Touareg · 65.000 €</div>
-            <div class="act-time">ayer</div>
-          </div>
-          <div class="act-item">
-            <div class="act-dot" style="background:var(--orange)"></div>
-            <div class="act-text"><strong>Roberto Abad</strong> — negociación estancada 11 días</div>
-            <div class="act-time">ayer</div>
-          </div>
-        </div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Leads este mes</div><div class="kpi-value">23</div><div class="kpi-sub"><span class="up">↑ +4</span> vs mes anterior</div></div>
+    <div class="kpi"><div class="kpi-label">Tasa de conversión</div><div class="kpi-value">17%</div><div class="kpi-sub"><span class="dn">↓ −2%</span> vs mes anterior</div></div>
+    <div class="kpi"><div class="kpi-label">Pipeline valor</div><div class="kpi-value" style="font-size:20px">847.000 €</div><div class="kpi-sub">23 oportunidades activas</div></div>
+    <div class="kpi"><div class="kpi-label">Test Drives</div><div class="kpi-value">11</div><div class="kpi-sub">3 pendientes esta semana</div></div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-hdr">Leads por semana — junio/julio 2026</div>
+      <div class="card-body" style="height:200px"><canvas id="chart-leads"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-hdr">Actividad reciente</div>
+      <div class="card-body">
+        <div class="act-item"><div class="act-dot dot-green"></div><div class="act-text">Pedro Martínez agendó test drive del <strong>Tiguan Allspace</strong></div><div class="act-time">35m</div></div>
+        <div class="act-item"><div class="act-dot dot-blue"></div><div class="act-text">Nuevo lead desde web: interesado en <strong>Golf 8 GTI</strong></div><div class="act-time">1h</div></div>
+        <div class="act-item"><div class="act-dot dot-orange"></div><div class="act-text">⚠️ Cristina Vega — 9 días sin contacto (Touareg)</div><div class="act-time">hoy</div></div>
+        <div class="act-item"><div class="act-dot dot-green"></div><div class="act-text">Laura Soler firmó contrato <strong>Touareg</strong> — 65.000 €</div><div class="act-time">ayer</div></div>
+        <div class="act-item"><div class="act-dot dot-red"></div><div class="act-text">Roberto Abad — negociación estancada hace 11 días</div><div class="act-time">ayer</div></div>
       </div>
     </div>
-
-    <div class="page" id="page-leads">
-      <div class="table-wrap" id="leads-table-wrap">
-        <div class="table-header">
-          <h3>Leads activos</h3>
-          <input class="search-box" placeholder="🔍  Buscar lead...">
-          <button class="btn-add">+ Nuevo lead</button>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Nombre</th><th>Modelo</th><th>Teléfono</th><th>Último contacto</th><th>Estado</th><th>Sin contacto</th>
-            </tr>
-          </thead>
-          <tbody id="leads-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="page" id="page-pipeline">
-      <div class="kanban" id="kanban-board"></div>
-    </div>
-
-    <div class="page" id="page-seguimientos">
-      <div class="seg-list" id="seg-list"></div>
-    </div>
-
-    <div class="page" id="page-entregas">
-      <div class="entrega-list" id="entrega-list"></div>
-    </div>
-
   </div>
 </div>
 
-<!-- TOUR OVERLAY -->
-<div class="tour-overlay" id="tour">
-  <div class="tour-dim"></div>
-  <div class="tour-spotlight" id="tour-spot"></div>
-  <div class="tour-box" id="tour-box">
-    <div class="tour-step-lbl" id="t-step">Paso 1 de 3</div>
-    <div class="tour-ttl" id="t-title"></div>
-    <div class="tour-dsc" id="t-desc"></div>
-    <div class="tour-btns">
-      <button class="btn-skip" onclick="endTour()">Saltar</button>
-      <button class="btn-prev" id="t-prev" onclick="moveTour(-1)">← Anterior</button>
-      <button class="btn-next-t" id="t-next" onclick="moveTour(1)">Siguiente →</button>
+<!-- LEADS -->
+<div class="page" id="page-leads">
+  <div class="ph"><div><h1>Leads</h1><p>Gestión de oportunidades de venta · 12 leads activos</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm">+ Nuevo Lead</button></div></div>
+  <div class="toolbar">
+    <input class="search-input" placeholder="🔍  Buscar lead..." oninput="filterLeads(this.value)">
+    <button class="filter-btn act" onclick="setFilter('todos',this)">Todos (12)</button>
+    <button class="filter-btn" onclick="setFilter('nuevo',this)">Nuevo</button>
+    <button class="filter-btn" onclick="setFilter('contactado',this)">Contactado</button>
+    <button class="filter-btn" onclick="setFilter('testdrive',this)">Test Drive</button>
+    <button class="filter-btn" onclick="setFilter('negociacion',this)">Negociación</button>
+    <button class="filter-btn" onclick="setFilter('perdido',this)">Perdido</button>
+  </div>
+  <div class="tcard" id="leads-tcard">
+    <table><thead><tr><th>Nombre</th><th>Modelo interesado</th><th>Teléfono</th><th>Fecha contacto</th><th>Estado</th><th>Sin contacto</th><th></th></tr></thead>
+    <tbody id="tb-leads"></tbody></table>
+  </div>
+</div>
+
+<!-- PIPELINE -->
+<div class="page" id="page-pipeline">
+  <div class="ph"><div><h1>Pipeline de ventas</h1><p>Estado de todas las oportunidades activas</p></div></div>
+  <div class="kanban" id="kanban-board"></div>
+</div>
+
+<!-- CLIENTES -->
+<div class="page" id="page-clientes">
+  <div class="ph"><div><h1>Clientes</h1><p>Compradores y su historial</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm">+ Nuevo Cliente</button></div></div>
+  <div class="tcard">
+    <table><thead><tr><th>Nombre</th><th>Vehículo comprado</th><th>Fecha compra</th><th>Precio</th><th>Próx. revisión</th><th>Estado</th></tr></thead>
+    <tbody id="tb-clientes"></tbody></table>
+    <div class="cli-footer"><span class="cli-footer-label">Total facturado — compradores activos</span><span class="cli-footer-val">294.800 €</span></div>
+  </div>
+</div>
+
+<!-- INVENTARIO -->
+<div class="page" id="page-inventario">
+  <div class="ph"><div><h1>Inventario</h1><p>Stock de vehículos disponibles</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm">+ Añadir vehículo</button></div></div>
+  <div class="inv-summary" id="inv-summary"></div>
+  <div class="toolbar">
+    <button class="filter-btn act" onclick="setInvFilter('todos',this)">Todos (15)</button>
+    <button class="filter-btn" onclick="setInvFilter('disponible',this)">Disponibles</button>
+    <button class="filter-btn" onclick="setInvFilter('reservado',this)">Reservados</button>
+  </div>
+  <div class="tcard">
+    <table><thead><tr><th>Modelo</th><th>Versión</th><th>Color</th><th>Precio</th><th>Matrícula</th><th>Estado</th></tr></thead>
+    <tbody id="tb-inv"></tbody></table>
+  </div>
+</div>
+
+<!-- SEGUIMIENTOS -->
+<div class="page" id="page-seguimientos">
+  <div class="ph"><div><h1>Seguimientos</h1><p>Agenda de contactos pendientes</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm">+ Nuevo seguimiento</button></div></div>
+  <div id="seg-content"></div>
+</div>
+
+<!-- OBJETIVOS -->
+<div class="page" id="page-objetivos">
+  <div class="ph"><div><h1>Objetivos</h1><p>Julio 2026 — Seguimiento de metas</p></div></div>
+  <div class="obj-hero">
+    <h2>Julio 2026 — Rendimiento actual</h2>
+    <p>Alexander Calle · Asesor Comercial · VW Carhaus</p>
+    <div class="obj-note">✓ Ritmo actual: 52% del objetivo de facturación a día 1 de julio. ¡Buen inicio de mes!</div>
+  </div>
+  <div class="obj-grid">
+    <div class="obj-card"><div class="obj-card-label">Unidades vendidas</div><div class="obj-nums"><span class="obj-cur">4</span><span class="obj-tot">/ 8 unidades</span></div><div class="obj-bar"><div class="obj-fill" style="width:50%"></div></div><div class="obj-pct">50% completado</div></div>
+    <div class="obj-card"><div class="obj-card-label">Facturación</div><div class="obj-nums"><span class="obj-cur">208.200 €</span><span class="obj-tot">/ 400.000 €</span></div><div class="obj-bar"><div class="obj-fill" style="width:52%"></div></div><div class="obj-pct">52% completado</div></div>
+    <div class="obj-card"><div class="obj-card-label">Test Drives realizados</div><div class="obj-nums"><span class="obj-cur">11</span><span class="obj-tot">/ 15</span></div><div class="obj-bar"><div class="obj-fill" style="width:73%;background:var(--green)"></div></div><div class="obj-pct">73% completado</div></div>
+  </div>
+  <div class="tcard">
+    <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;font-weight:600;background:var(--bg)">Ventas cerradas este mes</div>
+    <table><thead><tr><th>Cliente</th><th>Vehículo</th><th>Fecha cierre</th><th>Valor</th><th>Margen est.</th></tr></thead>
+    <tbody>
+      <tr><td>Laura Soler</td><td>Touareg 3.0 TDI</td><td>1 jul 2026</td><td style="font-weight:700;color:var(--navy)">65.000 €</td><td style="color:var(--green)">8.450 €</td></tr>
+      <tr><td>Andrés Bermejo</td><td>Golf 8 GTI</td><td>28 jun 2026</td><td style="font-weight:700;color:var(--navy)">38.200 €</td><td style="color:var(--green)">4.580 €</td></tr>
+      <tr><td>Nuria Blanco</td><td>ID.4 Pro Performance</td><td>25 jun 2026</td><td style="font-weight:700;color:var(--navy)">47.500 €</td><td style="color:var(--green)">5.700 €</td></tr>
+      <tr><td>Tomás Jiménez</td><td>Polo Style 1.0 TSI</td><td>20 jun 2026</td><td style="font-weight:700;color:var(--navy)">24.300 €</td><td style="color:var(--green)">2.920 €</td></tr>
+      <tr><td>Carmen Delgado</td><td>T-Roc R-Line</td><td>15 jun 2026</td><td style="font-weight:700;color:var(--navy)">33.800 €</td><td style="color:var(--green)">4.060 €</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /layout -->
+
+<!-- TOUR -->
+<div id="tour-overlay">
+  <div id="tour-spotlight"></div>
+  <div id="tour-box">
+    <div class="t-step" id="t-step">Paso 1 de 3</div>
+    <div class="t-title" id="t-title"></div>
+    <div class="t-desc" id="t-desc"></div>
+    <div class="t-actions">
+      <span class="t-skip" onclick="endTour()">Saltar</span>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" id="t-prev" onclick="tPrev()" style="display:none">Anterior</button>
+        <button class="btn btn-navy btn-sm" id="t-next" onclick="tNext()">Siguiente</button>
+      </div>
     </div>
   </div>
 </div>
@@ -346,169 +411,252 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <script>
 const LEADS=[
   {n:'Pedro Martínez',m:'Tiguan Allspace',t:'612 345 678',f:'30 jun 2026',e:'testdrive',d:1},
-  {n:'Ana Romero',m:'ID.4 Pro',t:'634 821 093',f:'29 jun 2026',e:'negociacion',d:2},
-  {n:'Carlos Fuentes',m:'Golf 8',t:'677 412 309',f:'28 jun 2026',e:'contactado',d:3},
-  {n:'Marta López',m:'T-Roc R-Line',t:'609 234 567',f:'27 jun 2026',e:'testdrive',d:4},
-  {n:'Miguel Torres',m:'Golf 8 GTI',t:'677 234 890',f:'26 jun 2026',e:'contactado',d:5},
-  {n:'Elena Castillo',m:'T-Roc',t:'609 876 543',f:'25 jun 2026',e:'testdrive',d:6},
-  {n:'Pablo Ortega',m:'Polo Style',t:'651 234 678',f:'24 jun 2026',e:'negociacion',d:7},
-  {n:'Javier Herrero',m:'Polo GTI',t:'651 087 234',f:'22 jun 2026',e:'contactado',d:9},
-  {n:'Cristina Vega',m:'Touareg',t:'698 345 120',f:'22 jun 2026',e:'nuevo',d:9},
-  {n:'Roberto Abad',m:'ID.4',t:'612 890 345',f:'20 jun 2026',e:'negociacion',d:11},
-  {n:'Sofía Ramos',m:'Tiguan Allspace',t:'634 567 890',f:'19 jun 2026',e:'nuevo',d:12},
-  {n:'Isabel Navarro',m:'ID.4',t:'698 012 345',f:'18 jun 2026',e:'perdido',d:13},
+  {n:'Ana Romero',m:'ID.4 Pro',t:'698 234 567',f:'29 jun 2026',e:'negociacion',d:2},
+  {n:'Carlos Fuentes',m:'Golf 8',t:'677 890 123',f:'28 jun 2026',e:'contactado',d:3},
+  {n:'Marta López',m:'T-Roc R-Line',t:'634 567 890',f:'27 jun 2026',e:'testdrive',d:4},
+  {n:'Miguel Torres',m:'Golf 8 GTI',t:'654 321 098',f:'26 jun 2026',e:'contactado',d:5},
+  {n:'Elena Castillo',m:'T-Roc',t:'612 098 765',f:'25 jun 2026',e:'testdrive',d:6},
+  {n:'Pablo Ortega',m:'Polo Style',t:'699 876 543',f:'24 jun 2026',e:'negociacion',d:7},
+  {n:'Javier Herrero',m:'Polo GTI',t:'677 654 321',f:'22 jun 2026',e:'contactado',d:9},
+  {n:'Cristina Vega',m:'Touareg',t:'634 321 654',f:'22 jun 2026',e:'nuevo',d:9},
+  {n:'Roberto Abad',m:'ID.4',t:'612 543 210',f:'20 jun 2026',e:'negociacion',d:11},
+  {n:'Sofía Ramos',m:'Tiguan Allspace',t:'698 765 432',f:'19 jun 2026',e:'nuevo',d:12},
+  {n:'Isabel Navarro',m:'ID.4',t:'654 098 765',f:'18 jun 2026',e:'perdido',d:13},
+];
+const BL={nuevo:'b-nuevo',contactado:'b-contactado',testdrive:'b-testdrive',negociacion:'b-negociacion',perdido:'b-perdido'};
+const BN={nuevo:'Nuevo',contactado:'Contactado',testdrive:'Test Drive',negociacion:'Negociación',perdido:'Perdido'};
+
+const CLIENTES=[
+  {n:'Laura Soler',v:'Touareg 3.0 TDI',f:'01/07/2026',p:'65.000 €',r:'01/07/2027',e:'activo'},
+  {n:'Andrés Bermejo',v:'Golf 8 GTI',f:'28/06/2026',p:'38.200 €',r:'28/06/2027',e:'activo'},
+  {n:'Nuria Blanco',v:'ID.4 Pro Performance',f:'25/06/2026',p:'47.500 €',r:'25/06/2027',e:'activo'},
+  {n:'Tomás Jiménez',v:'Polo Style 1.0 TSI',f:'20/06/2026',p:'24.300 €',r:'20/06/2027',e:'activo'},
+  {n:'Carmen Delgado',v:'T-Roc R-Line',f:'15/06/2026',p:'33.800 €',r:'15/06/2027',e:'activo'},
+  {n:'Raúl Santana',v:'Arteon 2.0 TSI',f:'10/03/2025',p:'52.000 €',r:'10/06/2026',e:'vencida'},
+  {n:'Pilar Molina',v:'Tiguan 1.5 TSI',f:'15/01/2025',p:'38.000 €',r:'15/04/2026',e:'vencida'},
+  {n:'Jorge Llorente',v:'Golf 8',f:'01/11/2024',p:'32.000 €',r:'01/11/2026',e:'activo'},
 ];
 
-const PIPELINE={
-  'Nuevo':[
-    {n:'Cristina Vega',m:'Touareg',p:'64.900 €',d:'9 días'},
-    {n:'Sofía Ramos',m:'Tiguan Allspace',p:'42.300 €',d:'12 días'},
-  ],
-  'Test Drive':[
-    {n:'Pedro Martínez',m:'Tiguan Allspace',p:'42.300 €',d:'1 día'},
-    {n:'Marta López',m:'T-Roc R-Line',p:'31.500 €',d:'4 días'},
-    {n:'Elena Castillo',m:'T-Roc',p:'29.900 €',d:'6 días'},
-  ],
-  'Negociación':[
-    {n:'Ana Romero',m:'ID.4 Pro',p:'47.500 €',d:'2 días'},
-    {n:'Roberto Abad',m:'ID.4',p:'45.800 €',d:'11 días'},
-    {n:'Pablo Ortega',m:'Polo Style',p:'24.900 €',d:'7 días'},
-  ],
-  'Entrega':[
-    {n:'Laura Soler',m:'Touareg',p:'65.000 €',d:'hoy'},
-  ],
-};
-
-const SEGS=[
-  {d:'02',ms:'Jul',n:'Javier Herrero',a:'Llamar para reactivar interés — Polo GTI disponible en stock',p:'alta'},
-  {d:'02',ms:'Jul',n:'Cristina Vega',a:'Enviar ficha técnica Touareg y propuesta de financiación personalizada',p:'alta'},
-  {d:'03',ms:'Jul',n:'Roberto Abad',a:'Reunión presencial para cerrar condiciones del ID.4 — descuento aprobado',p:'alta'},
-  {d:'03',ms:'Jul',n:'Sofía Ramos',a:'Confirmar fecha y hora del test drive Tiguan Allspace',p:'alta'},
-  {d:'05',ms:'Jul',n:'Ana Romero',a:'Seguimiento negociación — espera respuesta de financiera VWFS',p:'media'},
-  {d:'07',ms:'Jul',n:'Pablo Ortega',a:'Llamada de cierre Polo Style — precio final acordado',p:'media'},
-  {d:'10',ms:'Jul',n:'Elena Castillo',a:'Post test drive — valorar si avanza a negociación el T-Roc',p:'media'},
+const INV=[
+  {mo:'ID.4',ve:'Pro Performance AWD',co:'Azul Atlántico',pr:'54.900 €',ma:'2847-KLM',es:'disponible'},
+  {mo:'ID.4',ve:'Pure Performance',co:'Blanco Glaciar',pr:'39.990 €',ma:'3421-NOP',es:'disponible'},
+  {mo:'Tiguan Allspace',ve:'R-Line 2.0 TDI',co:'Gris Platino',pr:'47.800 €',ma:'5632-QRS',es:'reservado'},
+  {mo:'Tiguan',ve:'Life 1.5 TSI',co:'Negro Profundo',pr:'33.500 €',ma:'7812-TUV',es:'disponible'},
+  {mo:'Golf 8',ve:'GTI 2.0 TSI',co:'Rojo Tornado',pr:'42.150 €',ma:'9023-WXY',es:'disponible'},
+  {mo:'Golf 8',ve:'Life 1.0 TSI',co:'Blanco Puro',pr:'28.400 €',ma:'1245-ZAB',es:'disponible'},
+  {mo:'T-Roc',ve:'R-Line 1.5 TSI',co:'Naranja Valencia',pr:'35.200 €',ma:'3467-CDE',es:'reservado'},
+  {mo:'T-Roc',ve:'Style 1.0 TSI',co:'Gris Platino',pr:'28.900 €',ma:'5689-FGH',es:'disponible'},
+  {mo:'Polo',ve:'GTI 2.0 TSI',co:'Negro Profundo',pr:'32.100 €',ma:'7901-IJK',es:'disponible'},
+  {mo:'Polo',ve:'Style 1.0 TSI',co:'Azul Ref. Metal',pr:'23.500 €',ma:'2134-LMN',es:'disponible'},
+  {mo:'Touareg',ve:'V6 TDI 4Motion',co:'Plata Argelato',pr:'79.900 €',ma:'4356-OPQ',es:'reservado'},
+  {mo:'Arteon',ve:'R-Line 2.0 TDI',co:'Plata Lunare',pr:'56.800 €',ma:'6578-RST',es:'disponible'},
+  {mo:'Passat',ve:'Business 2.0 TDI',co:'Gris Platino',pr:'41.200 €',ma:'8790-UVW',es:'disponible'},
+  {mo:'Taigo',ve:'Style 1.0 TSI',co:'Azul Petróleo',pr:'26.300 €',ma:'0912-XYZ',es:'disponible'},
+  {mo:'ID.3',ve:'Pro S 77kWh',co:'Blanco Glaciar',pr:'43.900 €',ma:'1357-ABC',es:'vendido'},
 ];
 
-const ENTREGAS=[
-  {n:'Laura Soler',m:'Touareg 3.0 TDI',f:'1 Jul 2026',v:'65.000 €'},
-  {n:'Andrés Bermejo',m:'Golf 8 GTI',f:'28 Jun 2026',v:'38.200 €'},
-  {n:'Nuria Blanco',m:'ID.4 Pro Performance',f:'25 Jun 2026',v:'47.500 €'},
-  {n:'Tomás Jiménez',m:'Polo Style 1.0 TSI',f:'20 Jun 2026',v:'24.300 €'},
-  {n:'Carmen Delgado',m:'T-Roc R-Line',f:'15 Jun 2026',v:'33.800 €'},
+const SEG=[
+  {g:'Hoy — 1 de julio',items:[
+    {d:1,m:'jul',n:'Javier Herrero',a:'Llamada de seguimiento — interesado en Polo GTI',h:'10:00',p:'alta'},
+    {d:1,m:'jul',n:'Cristina Vega',a:'Enviar ficha técnica Touareg y propuesta de financiación',h:'12:30',p:'alta'},
+  ]},
+  {g:'Esta semana',items:[
+    {d:2,m:'jul',n:'Pedro Martínez',a:'Confirmar disponibilidad Tiguan Allspace para test drive',h:'09:30',p:'alta'},
+    {d:3,m:'jul',n:'Roberto Abad',a:'Presentar oferta final ID.4 con descuento plan MOVES III',h:'11:00',p:'alta'},
+    {d:3,m:'jul',n:'Sofía Ramos',a:'Primera llamada — lead nuevo Tiguan Allspace',h:'16:00',p:'media'},
+    {d:4,m:'jul',n:'Ana Romero',a:'Revisar condiciones de financiación ID.4 Pro',h:'10:30',p:'media'},
+    {d:5,m:'jul',n:'Miguel Torres',a:'Seguimiento tras test drive Golf 8 GTI',h:'09:00',p:'media'},
+  ]},
+  {g:'Próxima semana',items:[
+    {d:7,m:'jul',n:'Pablo Ortega',a:'Cierre negociación Polo Style — revisar descuento final',h:'10:00',p:'media'},
+    {d:8,m:'jul',n:'Carlos Fuentes',a:'Propuesta personalización Golf 8',h:'12:00',p:'baja'},
+    {d:10,m:'jul',n:'Elena Castillo',a:'Follow-up post test drive T-Roc',h:'11:30',p:'baja'},
+  ]},
 ];
 
-const TOUR_STEPS=[
-  {id:'pain-banner',title:'Tu mayor riesgo ahora mismo',desc:'148.000 € en ventas en peligro porque 4 leads llevan más de 7 días sin contacto. El sistema te avisa exactamente cuándo actuar — sin depender de tu memoria ni de una hoja de Excel.',pg:null,pos:'below'},
-  {id:'leads-table-wrap',title:'Cada lead, visible y controlado',desc:'Ves en rojo quién lleva más días sin contacto. Con un solo vistazo sabes qué priorizar hoy. Toda la información centralizada, accesible desde el móvil en tiempo real.',pg:'leads',pos:'above'},
-  {id:'kanban-board',title:'Tu pipeline de ventas en vivo',desc:'De primer contacto a entrega, cada oportunidad avanza por etapas. Sabes exactamente en qué punto está cada cliente y cuánto llevan esperando. Nunca más una venta perdida por descuido.',pg:'pipeline',pos:'above'},
+const PIPE_COLS=[
+  {key:'nuevo',label:'Nuevo',color:'#1a5faa',items:[
+    {n:'Cristina Vega',m:'Touareg',p:'64.900 €',d:9},
+    {n:'Sofía Ramos',m:'Tiguan Allspace',p:'42.300 €',d:12},
+  ]},
+  {key:'testdrive',label:'Test Drive',color:'#1a7a4a',items:[
+    {n:'Pedro Martínez',m:'Tiguan Allspace',p:'47.800 €',d:1},
+    {n:'Marta López',m:'T-Roc R-Line',p:'35.200 €',d:4},
+    {n:'Elena Castillo',m:'T-Roc',p:'28.900 €',d:6},
+  ]},
+  {key:'negociacion',label:'Negociación',color:'#c96b00',items:[
+    {n:'Ana Romero',m:'ID.4 Pro',p:'47.500 €',d:2},
+    {n:'Roberto Abad',m:'ID.4',p:'45.800 €',d:11},
+    {n:'Pablo Ortega',m:'Polo Style',p:'24.900 €',d:7},
+  ]},
+  {key:'entrega',label:'Entrega',color:'#6d3faa',items:[
+    {n:'Laura Soler',m:'Touareg 3.0 TDI',p:'65.000 €',d:0},
+  ]},
 ];
 
-let tIdx=0;
+const TITLES={dashboard:'Dashboard',leads:'Leads',pipeline:'Pipeline de ventas',clientes:'Clientes',inventario:'Inventario',seguimientos:'Seguimientos',objetivos:'Objetivos'};
 
-function goNav(page,el){
+function nav(page,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
-  if(el) el.classList.add('active');
-  const T={dashboard:'Dashboard',leads:'Leads',pipeline:'Pipeline',seguimientos:'Seguimientos',entregas:'Entregas'};
-  document.getElementById('page-title').textContent=T[page]||page;
+  if(el)el.classList.add('active');
+  document.getElementById('tb-title').textContent=TITLES[page]||page;
 }
 
-function renderLeads(){
-  const B={nuevo:['b-nuevo','Nuevo'],contactado:['b-contactado','Contactado'],testdrive:['b-testdrive','Test Drive'],negociacion:['b-negociacion','Negociación'],perdido:['b-perdido','Perdido']};
-  document.getElementById('leads-tbody').innerHTML=LEADS.map(l=>{
-    const [bc,bt]=B[l.e];
-    const dc=l.d>7?'dias-red':l.d>5?'dias-warn':'dias-ok';
-    const warn=l.d>7?' ⚠️':'';
-    return `<tr><td style="font-weight:600">${l.n}</td><td style="color:var(--muted)">${l.m}</td><td>${l.t}</td><td style="color:var(--muted)">${l.f}</td><td><span class="bdg ${bc}">${bt}</span></td><td class="${dc}">${l.d===1?'1 día':`${l.d} días`}${warn}</td></tr>`;
-  }).join('');
+function setDate(){
+  const d=new Date(2026,6,1);
+  const s=d.toLocaleDateString('es-ES',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('tb-date').textContent=s.charAt(0).toUpperCase()+s.slice(1);
 }
+
+let curFilter='todos';
+function dc(d){return d>7?'d-danger':d>5?'d-warn':'d-ok';}
+function dt(d){return d>7?`⚠️ ${d} días`:d>5?`${d} días`:`${d} días`;}
+function renderLeads(f,q){
+  let data=LEADS;
+  if(f&&f!=='todos')data=data.filter(l=>l.e===f);
+  if(q)data=data.filter(l=>l.n.toLowerCase().includes(q)||l.m.toLowerCase().includes(q));
+  document.getElementById('tb-leads').innerHTML=data.map(l=>`<tr>
+    <td><strong>${l.n}</strong></td><td>${l.m}</td><td style="color:var(--text3)">${l.t}</td>
+    <td style="color:var(--text3)">${l.f}</td>
+    <td><span class="badge ${BL[l.e]}">${BN[l.e]}</span></td>
+    <td class="${dc(l.d)}">${dt(l.d)}</td>
+    <td><button class="btn btn-outline btn-xs">Contactar</button></td>
+  </tr>`).join('');
+}
+function setFilter(f,el){
+  curFilter=f;
+  document.querySelectorAll('#page-leads .filter-btn').forEach(b=>b.classList.remove('act'));
+  el.classList.add('act');renderLeads(f);
+}
+function filterLeads(q){renderLeads(curFilter,q.toLowerCase());}
 
 function renderPipeline(){
-  const cols=['Nuevo','Test Drive','Negociación','Entrega'];
-  const cc={Nuevo:'var(--accent)','Test Drive':'var(--gold)',Negociación:'var(--yellow)',Entrega:'var(--green)'};
-  document.getElementById('kanban-board').innerHTML=cols.map(col=>{
-    const cards=PIPELINE[col]||[];
-    return `<div class="kol"><div class="kol-head"><div style="width:8px;height:8px;border-radius:50%;background:${cc[col]}"></div><div class="kol-name">${col}</div><div class="kol-count">${cards.length}</div></div><div class="kol-body">${cards.map(c=>`<div class="kcard"><div class="kcard-name">${c.n}</div><div class="kcard-model">${c.m}</div><div class="kcard-bottom"><div class="kcard-price">${c.p}</div><div class="kcard-days">${c.d}</div></div></div>`).join('')}</div></div>`;
+  document.getElementById('kanban-board').innerHTML=PIPE_COLS.map(col=>{
+    const total=col.items.reduce((a,i)=>a+parseInt(i.p.replace(/[^\d]/g,''),10),0);
+    return `<div class="kb-col">
+      <div class="kb-col-hdr">
+        <div class="kbc-label" style="color:${col.color}">${col.label}</div>
+        <div class="kbc-meta">${col.items.length} oportunidades · ${total.toLocaleString('es-ES')} €</div>
+      </div>
+      <div class="kb-cards">${col.items.map(i=>`<div class="kb-card" style="border-left:3px solid ${col.color}">
+        <div class="kb-cname">${i.n}</div><div class="kb-cmodel">${i.m}</div>
+        <div class="kb-cprice" style="color:${col.color}">${i.p}</div>
+        <div class="kb-cdays">${i.d>0?i.d+' días en esta etapa':'Entrega hoy'}</div>
+      </div>`).join('')}</div>
+    </div>`;
   }).join('');
 }
 
-function renderSegs(){
-  document.getElementById('seg-list').innerHTML=SEGS.map(s=>`<div class="seg-item"><div class="seg-date"><div class="seg-day">${s.d}</div><div class="seg-month">${s.ms}</div></div><div class="seg-info"><div class="seg-name">${s.n}</div><div class="seg-action">${s.a}</div></div><div class="seg-prio ${s.p==='alta'?'p-alta':'p-media'}">${s.p==='alta'?'Alta':'Media'}</div></div>`).join('');
+function renderClientes(){
+  document.getElementById('tb-clientes').innerHTML=CLIENTES.map(c=>`<tr>
+    <td><strong>${c.n}</strong></td><td>${c.v}</td>
+    <td style="color:var(--text3)">${c.f}</td>
+    <td style="font-weight:700;color:var(--navy)">${c.p}</td>
+    <td class="${c.e==='vencida'?'d-danger':''}">${c.r}</td>
+    <td><span class="badge b-${c.e}">${c.e==='vencida'?'Rev. Vencida':'Activo'}</span></td>
+  </tr>`).join('');
 }
 
-function renderEntregas(){
-  document.getElementById('entrega-list').innerHTML=ENTREGAS.map(e=>`<div class="entrega-item"><div class="e-icon">🚗</div><div class="e-info"><div class="e-name">${e.n}</div><div class="e-model">${e.m}</div><div class="e-date">${e.f}</div></div><div class="e-val">${e.v}</div></div>`).join('');
+let curInvFilter='todos';
+function renderInv(f){
+  let data=INV;
+  if(f&&f!=='todos')data=data.filter(v=>v.es===f);
+  document.getElementById('tb-inv').innerHTML=data.map(v=>`<tr>
+    <td><strong>${v.mo}</strong></td><td>${v.ve}</td><td>${v.co}</td>
+    <td style="font-weight:700;color:var(--navy)">${v.pr}</td>
+    <td style="color:var(--text3);font-size:12px">${v.ma}</td>
+    <td><span class="badge b-${v.es}">${v.es.charAt(0).toUpperCase()+v.es.slice(1)}</span></td>
+  </tr>`).join('');
+  const disp=INV.filter(v=>v.es==='disponible').length;
+  const res=INV.filter(v=>v.es==='reservado').length;
+  const vend=INV.filter(v=>v.es==='vendido').length;
+  const tv=INV.filter(v=>v.es!=='vendido').reduce((a,v)=>a+parseInt(v.pr.replace(/[^\d]/g,''),10),0);
+  document.getElementById('inv-summary').innerHTML=`
+    <div class="inv-stat"><div class="inv-stat-val" style="color:var(--green)">${disp}</div><div class="inv-stat-label">Disponibles</div></div>
+    <div class="inv-stat"><div class="inv-stat-val" style="color:var(--orange)">${res}</div><div class="inv-stat-label">Reservados</div></div>
+    <div class="inv-stat"><div class="inv-stat-val" style="color:var(--text3)">${vend}</div><div class="inv-stat-label">Vendidos</div></div>
+    <div class="inv-stat"><div class="inv-stat-val" style="font-size:18px">${tv.toLocaleString('es-ES')} €</div><div class="inv-stat-label">Valor total en stock</div></div>`;
+}
+function setInvFilter(f,el){
+  curInvFilter=f;
+  document.querySelectorAll('#page-inventario .filter-btn').forEach(b=>b.classList.remove('act'));
+  el.classList.add('act');renderInv(f);
+}
+
+function renderSeg(){
+  document.getElementById('seg-content').innerHTML=SEG.map(g=>`
+    <div class="seg-group">
+      <div class="seg-ghdr">${g.g}</div>
+      ${g.items.map(i=>`<div class="seg-item">
+        <div class="seg-date"><div class="seg-day">${i.d}</div><div class="seg-mon">${i.m}</div></div>
+        <div class="seg-div"></div>
+        <div class="seg-info">
+          <div class="seg-name">${i.n}</div>
+          <div class="seg-action">${i.a}</div>
+          <div class="seg-time">🕐 ${i.h} &nbsp;·&nbsp; <span class="prio prio-${i.p}">${i.p.charAt(0).toUpperCase()+i.p.slice(1)}</span></div>
+        </div>
+        <button class="btn btn-outline btn-xs" onclick="this.textContent='✓ Hecho';this.style.color='var(--green)';this.style.borderColor='var(--green)'">Marcar hecho</button>
+      </div>`).join('')}
+    </div>`).join('');
 }
 
 function renderChart(){
-  new Chart(document.getElementById('chart-leads').getContext('2d'),{
-    type:'bar',
-    data:{
-      labels:['9-15 Jun','16-22 Jun','23-29 Jun','30 Jun-1 Jul'],
-      datasets:[
-        {label:'Leads',data:[5,7,8,3],backgroundColor:'rgba(0,51,153,.55)',borderColor:'#003399',borderWidth:2,borderRadius:5},
-        {label:'Conversiones',data:[1,1,2,0],backgroundColor:'rgba(0,200,83,.4)',borderColor:'#00c853',borderWidth:2,borderRadius:5}
-      ]
-    },
-    options:{
-      responsive:true,
-      plugins:{legend:{labels:{color:'#6b7fa3',font:{size:11,family:'Inter'}}}},
-      scales:{
-        x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7fa3',font:{size:11}}},
-        y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7fa3',font:{size:11},stepSize:2}}
-      }
-    }
-  });
+  const ctx=document.getElementById('chart-leads').getContext('2d');
+  new Chart(ctx,{type:'bar',data:{
+    labels:['9–15 jun','16–22 jun','23–29 jun','30 jun–1 jul'],
+    datasets:[
+      {label:'Leads',data:[5,7,8,3],backgroundColor:'rgba(26,39,68,.12)',borderColor:'#1a2744',borderWidth:2,borderRadius:3},
+      {label:'Conversiones',data:[1,1,2,0],backgroundColor:'rgba(26,122,74,.12)',borderColor:'#1a7a4a',borderWidth:2,borderRadius:3}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{family:'Inter',size:11},color:'#4a5568',boxWidth:12,padding:16}}},
+    scales:{x:{grid:{display:false},ticks:{font:{family:'Inter',size:11},color:'#8a94a6'}},
+            y:{grid:{color:'#f1f3f5'},ticks:{font:{family:'Inter',size:11},color:'#8a94a6'}}}
+  }});
 }
 
 // TOUR
-function showTour(){
-  tIdx=0;
-  renderTourStep();
-  document.getElementById('tour').classList.add('active');
-}
-
-function renderTourStep(){
-  const s=TOUR_STEPS[tIdx];
-  if(s.pg) goNav(s.pg,document.querySelector(`[data-page="${s.pg}"]`));
-  document.getElementById('t-step').textContent=`Paso ${tIdx+1} de ${TOUR_STEPS.length}`;
+const TSTEPS=[
+  {page:'dashboard',targetId:'pain-alert',title:'Tu mayor riesgo ahora mismo',desc:'4 leads sin seguimiento pueden costar 148.000 € en ventas perdidas. Siempre visible, siempre bajo control.'},
+  {page:'leads',targetId:'leads-tcard',title:'Cada oportunidad, visible',desc:'Todos tus leads en un lugar. Días sin contacto en rojo para que nunca pierdas una venta por falta de seguimiento.'},
+  {page:'pipeline',targetId:'kanban-board',title:'Tu pipeline de ventas en vivo',desc:'De interés a entrega, cada oportunidad en su etapa. Mueve, gestiona y cierra más ventas.'},
+];
+let tStep=0;
+function startTour(){tStep=0;document.getElementById('tour-overlay').style.display='block';showTStep();}
+function showTStep(){
+  const s=TSTEPS[tStep];
+  nav(s.page,document.querySelector(`[data-page="${s.page}"]`));
+  document.getElementById('t-step').textContent=`Paso ${tStep+1} de ${TSTEPS.length}`;
   document.getElementById('t-title').textContent=s.title;
   document.getElementById('t-desc').textContent=s.desc;
-  document.getElementById('t-prev').style.display=tIdx===0?'none':'';
-  document.getElementById('t-next').textContent=tIdx===TOUR_STEPS.length-1?'¡Lo quiero →':'Siguiente →';
+  document.getElementById('t-prev').style.display=tStep===0?'none':'';
+  document.getElementById('t-next').textContent=tStep===TSTEPS.length-1?'¡Lo quiero →':'Siguiente';
   setTimeout(()=>{
-    const el=document.getElementById(s.id);
-    if(!el)return;
-    const r=el.getBoundingClientRect();
-    const sp=document.getElementById('tour-spot');
-    sp.style.cssText=`left:${r.left-8}px;top:${r.top-8}px;width:${r.width+16}px;height:${r.height+16}px`;
+    const el=document.getElementById(s.targetId);if(!el)return;
+    const r=el.getBoundingClientRect();const p=10;
+    const sp=document.getElementById('tour-spotlight');
+    sp.style.cssText=`left:${r.left-p}px;top:${r.top-p}px;width:${r.width+p*2}px;height:${r.height+p*2}px;box-shadow:0 0 0 9999px rgba(0,0,0,.55);border-radius:6px;`;
     const box=document.getElementById('tour-box');
-    const bh=220;
-    const ty=s.pos==='below'?r.bottom+20:Math.max(20,r.top-bh-20);
-    const tx=Math.min(Math.max(r.left,16),window.innerWidth-360);
-    box.style.cssText=`top:${ty}px;left:${tx}px`;
-  },s.pg?300:50);
+    let top=r.bottom+16;
+    if(top+220>window.innerHeight)top=r.top-240;
+    box.style.cssText=`top:${Math.max(10,top)}px;left:${Math.min(r.left,window.innerWidth-350)}px;`;
+  },350);
 }
+function tNext(){if(tStep<TSTEPS.length-1){tStep++;showTStep();}else endTour();}
+function tPrev(){if(tStep>0){tStep--;showTStep();}}
+function endTour(){document.getElementById('tour-overlay').style.display='none';}
 
-function moveTour(dir){
-  if(tIdx+dir>=TOUR_STEPS.length){endTour();return;}
-  if(tIdx+dir<0)return;
-  tIdx+=dir;
-  renderTourStep();
-}
-
-function endTour(){
-  document.getElementById('tour').classList.remove('active');
-  goNav('dashboard',document.querySelector('[data-page="dashboard"]'));
-}
-
-renderLeads();
+// INIT
+setDate();
+renderLeads('todos');
 renderPipeline();
-renderSegs();
-renderEntregas();
-renderChart();
-setTimeout(showTour,1000);
+renderClientes();
+renderInv('todos');
+renderSeg();
+setTimeout(renderChart,100);
+setTimeout(startTour,1200);
 </script>
 </body>
 </html>
