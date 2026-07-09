@@ -259,6 +259,15 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
     <svg width="15" height="15" fill="none" stroke="var(--text3)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
     Objetivos
   </div>
+  <div class="sb-section">Finanzas</div>
+  <div class="ni" data-page="facturacion" onclick="nav('facturacion',this)">
+    <svg width="15" height="15" fill="none" stroke="var(--text3)" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+    Facturación
+  </div>
+  <div class="ni" data-page="finanzas" onclick="nav('finanzas',this)">
+    <svg width="15" height="15" fill="none" stroke="var(--text3)" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+    Finanzas
+  </div>
   <div class="sb-brand">Desarrollado por <b>Airmate</b></div>
   <div class="sb-bottom">
     <div class="sb-user">
@@ -388,6 +397,42 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
   </div>
 </div>
 
+<!-- FACTURACIÓN -->
+<div class="page" id="page-facturacion">
+  <div class="ph"><div><h1>Facturación</h1><p>Contratos y facturas de venta</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm">+ Nueva factura</button></div></div>
+  <div class="inv-summary" id="fact-summary"></div>
+  <div class="toolbar">
+    <button class="filter-btn act" onclick="setFactFilter('todos',this)">Todas</button>
+    <button class="filter-btn" onclick="setFactFilter('pagada',this)">Pagadas</button>
+    <button class="filter-btn" onclick="setFactFilter('pendiente',this)">Pendientes</button>
+  </div>
+  <div class="tcard">
+    <table><thead><tr><th>Nº Factura</th><th>Cliente</th><th>Vehículo</th><th>Fecha</th><th>Importe</th><th>Estado</th><th></th></tr></thead>
+    <tbody id="tb-fact"></tbody></table>
+  </div>
+</div>
+
+<!-- FINANZAS -->
+<div class="page" id="page-finanzas">
+  <div class="ph"><div><h1>Finanzas</h1><p>Facturación, margen y rendimiento del mes</p></div></div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Facturación julio</div><div class="kpi-value" style="font-size:20px">208.200 €</div><div class="kpi-sub">5 ventas cerradas</div></div>
+    <div class="kpi"><div class="kpi-label">Margen bruto</div><div class="kpi-value" style="font-size:20px">25.710 €</div><div class="kpi-sub">12,3% sobre facturación</div></div>
+    <div class="kpi"><div class="kpi-label">Ticket medio</div><div class="kpi-value" style="font-size:20px">41.640 €</div><div class="kpi-sub">por vehículo vendido</div></div>
+    <div class="kpi"><div class="kpi-label">Pendiente de cobro</div><div class="kpi-value" style="font-size:20px;color:var(--red)">14.900 €</div><div class="kpi-sub">2 facturas pendientes</div></div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-hdr">Facturación por mes — 2026</div>
+      <div class="card-body" style="height:220px"><canvas id="chart-finanzas"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-hdr">Margen por modelo</div>
+      <div class="card-body" id="margen-modelo"></div>
+    </div>
+  </div>
+</div>
+
 </div><!-- /content -->
 </div><!-- /layout -->
 
@@ -494,14 +539,80 @@ const PIPE_COLS=[
   ]},
 ];
 
-const TITLES={dashboard:'Dashboard',leads:'Leads',pipeline:'Pipeline de ventas',clientes:'Clientes',inventario:'Inventario',seguimientos:'Seguimientos',objetivos:'Objetivos'};
+const TITLES={dashboard:'Dashboard',leads:'Leads',pipeline:'Pipeline de ventas',clientes:'Clientes',inventario:'Inventario',seguimientos:'Seguimientos',objetivos:'Objetivos',facturacion:'Facturación',finanzas:'Finanzas'};
 
+const FACT=[
+  {num:'F-2026-0041',n:'Laura Soler',v:'Touareg 3.0 TDI',f:'01/07/2026',imp:'65.000 €',e:'pagada'},
+  {num:'F-2026-0040',n:'Andrés Bermejo',v:'Golf 8 GTI',f:'28/06/2026',imp:'38.200 €',e:'pagada'},
+  {num:'F-2026-0039',n:'Nuria Blanco',v:'ID.4 Pro Performance',f:'25/06/2026',imp:'47.500 €',e:'pagada'},
+  {num:'F-2026-0038',n:'Tomás Jiménez',v:'Polo Style 1.0 TSI',f:'20/06/2026',imp:'24.300 €',e:'pendiente'},
+  {num:'F-2026-0037',n:'Carmen Delgado',v:'T-Roc R-Line',f:'15/06/2026',imp:'33.800 €',e:'pendiente'},
+];
+const BLF={pagada:'b-activo',pendiente:'b-vencida'};
+const BNF={pagada:'Pagada',pendiente:'Pendiente'};
+
+const MARGEN_MODELO=[
+  {m:'Touareg',v:'8.450 €',pct:80},
+  {m:'ID.4',v:'5.700 €',pct:60},
+  {m:'Golf 8 GTI',v:'4.580 €',pct:48},
+  {m:'T-Roc',v:'4.060 €',pct:42},
+  {m:'Polo',v:'2.920 €',pct:28},
+];
+
+let curFactFilter='todos';
+function renderFact(f){
+  let data=FACT;
+  if(f&&f!=='todos')data=data.filter(x=>x.e===f);
+  document.getElementById('tb-fact').innerHTML=data.map(x=>`<tr>
+    <td style="color:var(--text3);font-size:12px">${x.num}</td><td><strong>${x.n}</strong></td><td>${x.v}</td>
+    <td style="color:var(--text3)">${x.f}</td>
+    <td style="font-weight:700;color:var(--navy)">${x.imp}</td>
+    <td><span class="badge ${BLF[x.e]}">${BNF[x.e]}</span></td>
+    <td>${x.e==='pendiente'?`<button class="btn btn-outline btn-xs" onclick="this.textContent='✓ Cobrada';this.disabled=true">Marcar cobrada</button>`:''}</td>
+  </tr>`).join('');
+  const total=FACT.reduce((a,x)=>a+parseInt(x.imp.replace(/[^\d]/g,''),10),0);
+  const pagado=FACT.filter(x=>x.e==='pagada').reduce((a,x)=>a+parseInt(x.imp.replace(/[^\d]/g,''),10),0);
+  const pendiente=total-pagado;
+  document.getElementById('fact-summary').innerHTML=`
+    <div class="inv-stat"><div class="inv-stat-val">${FACT.length}</div><div class="inv-stat-label">Facturas este mes</div></div>
+    <div class="inv-stat"><div class="inv-stat-val" style="color:var(--green)">${pagado.toLocaleString('es-ES')} €</div><div class="inv-stat-label">Cobrado</div></div>
+    <div class="inv-stat"><div class="inv-stat-val" style="color:var(--red)">${pendiente.toLocaleString('es-ES')} €</div><div class="inv-stat-label">Pendiente de cobro</div></div>
+    <div class="inv-stat"><div class="inv-stat-val" style="font-size:18px">${total.toLocaleString('es-ES')} €</div><div class="inv-stat-label">Total facturado</div></div>`;
+}
+function setFactFilter(f,el){
+  curFactFilter=f;
+  document.querySelectorAll('#page-facturacion .filter-btn').forEach(b=>b.classList.remove('act'));
+  el.classList.add('act');renderFact(f);
+}
+
+function renderMargen(){
+  document.getElementById('margen-modelo').innerHTML=MARGEN_MODELO.map(x=>`
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;margin-bottom:5px;"><span>${x.m}</span><span style="color:var(--green)">${x.v}</span></div>
+      <div class="obj-bar" style="height:8px;"><div class="obj-fill" style="width:${x.pct}%;background:var(--navy)"></div></div>
+    </div>`).join('');
+}
+
+function renderChartFinanzas(){
+  const ctx=document.getElementById('chart-finanzas').getContext('2d');
+  new Chart(ctx,{type:'bar',data:{
+    labels:['Feb','Mar','Abr','May','Jun','Jul'],
+    datasets:[{label:'Facturación',data:[142000,168000,155000,190000,198000,208200],backgroundColor:'rgba(26,39,68,.85)',borderRadius:3}]
+  },options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false},ticks:{font:{family:'Inter',size:11},color:'#8a94a6'}},
+            y:{grid:{color:'#f1f3f5'},ticks:{font:{family:'Inter',size:11},color:'#8a94a6',callback:v=>(v/1000)+'k €'}}}
+  }});
+}
+
+let _financeChartDrawn=false;
 function nav(page,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
   if(el)el.classList.add('active');
   document.getElementById('tb-title').textContent=TITLES[page]||page;
+  if(page==='finanzas'&&!_financeChartDrawn){_financeChartDrawn=true;setTimeout(renderChartFinanzas,50);}
 }
 
 function setDate(){
@@ -655,6 +766,8 @@ renderPipeline();
 renderClientes();
 renderInv('todos');
 renderSeg();
+renderFact('todos');
+renderMargen();
 setTimeout(renderChart,100);
 setTimeout(startTour,1200);
 </script>
