@@ -200,7 +200,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .d-danger{color:var(--red);font-weight:700;}
 
 /* TOUR */
-#tour-overlay{position:fixed;inset:0;z-index:9000;pointer-events:none;display:none;}
+#tour-overlay{position:fixed;inset:0;z-index:9000;pointer-events:auto;display:none;}
 #tour-overlay.active{display:block;pointer-events:all;}
 #tour-spotlight{position:absolute;border-radius:var(--r);transition:all .3s ease;}
 #tour-box{position:absolute;background:var(--white);border:1px solid var(--border);border-top:3px solid var(--navy);border-radius:var(--r);padding:22px 26px;width:330px;box-shadow:var(--shadow2);z-index:9001;}
@@ -339,7 +339,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 
 <!-- LEADS -->
 <div class="page" id="page-leads">
-  <div class="ph"><div><h1>Leads</h1><p>Gestión de oportunidades de venta · 12 leads activos</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm">+ Nuevo Lead</button></div></div>
+  <div class="ph"><div><h1>Leads</h1><p>Gestión de oportunidades de venta · 12 leads activos</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm" onclick="openNuevoLead()">+ Nuevo Lead</button></div></div>
   <div class="toolbar">
     <input class="search-input" placeholder="🔍  Buscar lead..." oninput="filterLeads(this.value)">
     <button class="filter-btn act" onclick="setFilter('todos',this)">Todos (12)</button>
@@ -363,7 +363,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 
 <!-- CLIENTES -->
 <div class="page" id="page-clientes">
-  <div class="ph"><div><h1>Clientes</h1><p>Compradores y su historial</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm">+ Nuevo Cliente</button></div></div>
+  <div class="ph"><div><h1>Clientes</h1><p>Compradores y su historial</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm" onclick="openNuevoCliente()">+ Nuevo Cliente</button></div></div>
   <div class="tcard">
     <table><thead><tr><th>Nombre</th><th>Vehículo comprado</th><th>Fecha compra</th><th>Precio</th><th>Próx. revisión</th><th>Estado</th></tr></thead>
     <tbody id="tb-clientes"></tbody></table>
@@ -373,7 +373,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 
 <!-- INVENTARIO -->
 <div class="page" id="page-inventario">
-  <div class="ph"><div><h1>Inventario</h1><p>Stock de vehículos disponibles</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm">+ Añadir vehículo</button></div></div>
+  <div class="ph"><div><h1>Inventario</h1><p>Stock de vehículos disponibles</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm" onclick="openNuevoVehiculo()">+ Añadir vehículo</button></div></div>
   <div class="inv-summary" id="inv-summary"></div>
   <div class="toolbar">
     <button class="filter-btn act" onclick="setInvFilter('todos',this)">Todos (15)</button>
@@ -381,14 +381,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
     <button class="filter-btn" onclick="setInvFilter('reservado',this)">Reservados</button>
   </div>
   <div class="tcard">
-    <table><thead><tr><th>Modelo</th><th>Versión</th><th>Color</th><th>Precio</th><th>Matrícula</th><th>Estado</th></tr></thead>
+    <table><thead><tr><th>Modelo</th><th>Versión</th><th>Color</th><th>Precio</th><th>Matrícula</th><th>Estado</th><th>Cambiar</th></tr></thead>
     <tbody id="tb-inv"></tbody></table>
   </div>
 </div>
 
 <!-- SEGUIMIENTOS -->
 <div class="page" id="page-seguimientos">
-  <div class="ph"><div><h1>Seguimientos</h1><p>Agenda de contactos pendientes</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm">+ Nuevo seguimiento</button></div></div>
+  <div class="ph"><div><h1>Seguimientos</h1><p>Agenda de contactos pendientes</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm" onclick="openNuevoSeguimiento()">+ Nuevo seguimiento</button></div></div>
   <div id="seg-content"></div>
 </div>
 
@@ -420,7 +420,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 
 <!-- FACTURACIÓN -->
 <div class="page" id="page-facturacion">
-  <div class="ph"><div><h1>Facturación</h1><p>Contratos y facturas de venta</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm">+ Nueva factura</button></div></div>
+  <div class="ph"><div><h1>Facturación</h1><p>Contratos y facturas de venta</p></div><div class="ph-actions"><button class="btn btn-navy btn-sm" onclick="openNuevaFactura()">+ Nueva factura</button></div></div>
   <div class="inv-summary" id="fact-summary"></div>
   <div class="toolbar">
     <button class="filter-btn act" onclick="setFactFilter('todos',this)">Todas</button>
@@ -474,7 +474,51 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
   </div>
 </div>
 
+<!-- MODAL GENÉRICO -->
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-hdr"><h3 id="modal-title">Título</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-bd" id="modal-body"></div>
+    <div class="modal-ft" id="modal-footer"></div>
+  </div>
+</div>
+<div class="toast-wrap" id="toast-wrap"></div>
+
 <script>
+// ═══════════ PERSISTENCIA LOCAL (sin backend) ═══════════
+// Todo lo que se crea o edita en este panel se guarda en el propio navegador
+// (localStorage), asi que persiste entre sesiones sin depender de Supabase ni de
+// ningun servidor. Los datos de ejemplo de abajo son solo la carga inicial, la
+// primera vez que se abre el panel en un navegador nuevo.
+const DB_KEY='carhaus_db_v1';
+function dbLoad(){
+  try{const raw=localStorage.getItem(DB_KEY);if(raw)return JSON.parse(raw);}catch(e){}
+  return null;
+}
+function dbSave(){
+  localStorage.setItem(DB_KEY,JSON.stringify({leads:LEADS,clientes:CLIENTES,inv:INV,fact:FACT,seg:SEG,pipe:PIPE_COLS}));
+}
+function toast(msg){
+  const el=document.createElement('div');el.className='toast';el.textContent=msg;
+  document.getElementById('toast-wrap').appendChild(el);
+  setTimeout(()=>{el.style.transition='opacity .3s';el.style.opacity='0';setTimeout(()=>el.remove(),300);},2600);
+}
+function openModal(title,bodyHtml,footerHtml){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-body').innerHTML=bodyHtml;
+  document.getElementById('modal-footer').innerHTML=footerHtml||`<button class="btn btn-outline btn-sm" onclick="closeModal()">Cancelar</button>`;
+  document.getElementById('modal-bg').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
+function fGrp(label,id,type,val,ph){
+  if(type==='textarea')return `<div class="f-grp"><label>${label}</label><textarea id="${id}" rows="2" placeholder="${ph||''}">${val||''}</textarea></div>`;
+  return `<div class="f-grp"><label>${label}</label><input id="${id}" type="${type||'text'}" value="${val==null?'':val}" placeholder="${ph||''}"></div>`;
+}
+function fSelGrp(label,id,options,selected){
+  return `<div class="f-grp"><label>${label}</label><select id="${id}">${options.map(o=>`<option value="${o.v}" ${o.v===selected?'selected':''}>${o.l}</option>`).join('')}</select></div>`;
+}
+let nextId=1;
+
 const LEADS=[
   {n:'Pedro Martínez',m:'Tiguan Allspace',t:'612 345 678',f:'30 jun 2026',e:'testdrive',d:1},
   {n:'Ana Romero',m:'ID.4 Pro',t:'698 234 567',f:'29 jun 2026',e:'negociacion',d:2},
@@ -589,7 +633,7 @@ function renderFact(f){
     <td style="color:var(--text3)">${x.f}</td>
     <td style="font-weight:700;color:var(--navy)">${x.imp}</td>
     <td><span class="badge ${BLF[x.e]}">${BNF[x.e]}</span></td>
-    <td>${x.e==='pendiente'?`<button class="btn btn-outline btn-xs" onclick="this.textContent='✓ Cobrada';this.disabled=true">Marcar cobrada</button>`:''}</td>
+    <td>${x.e==='pendiente'?`<button class="btn btn-outline btn-xs" onclick="marcarCobrada(${x.id})">Marcar cobrada</button>`:''}</td>
   </tr>`).join('');
   const total=FACT.reduce((a,x)=>a+parseInt(x.imp.replace(/[^\d]/g,''),10),0);
   const pagado=FACT.filter(x=>x.e==='pagada').reduce((a,x)=>a+parseInt(x.imp.replace(/[^\d]/g,''),10),0);
@@ -604,6 +648,26 @@ function setFactFilter(f,el){
   curFactFilter=f;
   document.querySelectorAll('#page-facturacion .filter-btn').forEach(b=>b.classList.remove('act'));
   el.classList.add('act');renderFact(f);
+}
+function marcarCobrada(id){
+  const x=FACT.find(f=>f.id===id);if(!x)return;
+  x.e='pagada';dbSave();renderFact(curFactFilter);toast('✓ Factura marcada como cobrada');
+}
+function openNuevaFactura(){
+  openModal('+ Nueva factura',`
+    ${fSelGrp('Cliente / vehículo','nf-cv',[{v:'',l:'— Elegir cliente —'},...CLIENTES.map(c=>({v:c.n+'|'+c.v,l:c.n+' — '+c.v}))],'')}
+    ${fGrp('Importe (€)','nf-imp','number')}
+    ${fSelGrp('Estado','nf-e',[{v:'pendiente',l:'Pendiente'},{v:'pagada',l:'Pagada'}],'pendiente')}
+  `,`<button class="btn btn-outline btn-sm" onclick="closeModal()">Cancelar</button><button class="btn btn-navy btn-sm" onclick="saveNuevaFactura()">Guardar</button>`);
+}
+function saveNuevaFactura(){
+  const cv=cv2('nf-cv');
+  if(!cv){toast('⚠ Elige un cliente');return;}
+  const [n,v]=cv.split('|');
+  const num='F-2026-'+String(1000+FACT.length+1).slice(1);
+  const hoy=new Date(2026,6,1).toLocaleDateString('es-ES');
+  FACT.unshift({id:nextId++,num,n,v,f:hoy,imp:(+cv2('nf-imp')||0).toLocaleString('es-ES')+' €',e:cv2('nf-e')});
+  dbSave();closeModal();renderFact(curFactFilter);toast('✓ Factura creada');
 }
 
 function renderMargen(){
@@ -654,9 +718,44 @@ function renderLeads(f,q){
     <td style="color:var(--text3)">${l.f}</td>
     <td><span class="badge ${BL[l.e]}">${BN[l.e]}</span></td>
     <td class="${dc(l.d)}">${dt(l.d)}</td>
-    <td><button class="btn btn-outline btn-xs">Contactar</button></td>
+    <td><button class="btn btn-outline btn-xs" onclick="openContactarLead(${l.id})">Contactar</button></td>
   </tr>`).join('');
+  document.querySelector('.ph p').textContent=`Gestión de oportunidades de venta · ${LEADS.length} leads activos`;
 }
+function openNuevoLead(){
+  openModal('+ Nuevo lead',`
+    ${fGrp('Nombre del cliente','nl-n')}
+    ${fGrp('Modelo interesado','nl-m')}
+    ${fGrp('Teléfono','nl-t')}
+    ${fSelGrp('Estado inicial','nl-e',[{v:'nuevo',l:'Nuevo'},{v:'contactado',l:'Contactado'},{v:'testdrive',l:'Test Drive'},{v:'negociacion',l:'Negociación'}],'nuevo')}
+  `,`<button class="btn btn-outline btn-sm" onclick="closeModal()">Cancelar</button><button class="btn btn-navy btn-sm" onclick="saveNuevoLead()">Guardar</button>`);
+}
+function saveNuevoLead(){
+  const n=cv2('nl-n').trim();
+  if(!n){toast('⚠ Falta el nombre del cliente');return;}
+  const hoy=new Date(2026,6,1).toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
+  LEADS.unshift({id:nextId++,n,m:cv2('nl-m')||'—',t:cv2('nl-t')||'—',f:hoy,e:cv2('nl-e'),d:0});
+  dbSave();closeModal();renderLeads(curFilter);toast('✓ Lead creado');
+}
+function openContactarLead(id){
+  const l=LEADS.find(x=>x.id===id);if(!l)return;
+  openModal('Contactar · '+l.n,`
+    ${fGrp('Nombre','ce-n',null,l.n)}
+    ${fGrp('Modelo interesado','ce-m',null,l.m)}
+    ${fGrp('Teléfono','ce-t',null,l.t)}
+    ${fSelGrp('Estado','ce-e',[{v:'nuevo',l:'Nuevo'},{v:'contactado',l:'Contactado'},{v:'testdrive',l:'Test Drive'},{v:'negociacion',l:'Negociación'},{v:'perdido',l:'Perdido'}],l.e)}
+  `,`<button class="btn btn-outline btn-sm" style="color:var(--red)" onclick="deleteLead(${id})">Eliminar</button><div style="flex:1"></div><button class="btn btn-outline btn-sm" onclick="closeModal()">Cancelar</button><button class="btn btn-navy btn-sm" onclick="saveContactarLead(${id})">Guardar</button>`);
+}
+function saveContactarLead(id){
+  const l=LEADS.find(x=>x.id===id);if(!l)return;
+  l.n=cv2('ce-n').trim()||l.n;l.m=cv2('ce-m');l.t=cv2('ce-t');l.e=cv2('ce-e');l.d=0;
+  dbSave();closeModal();renderLeads(curFilter);toast('✓ Contacto registrado');
+}
+function deleteLead(id){
+  const i=LEADS.findIndex(x=>x.id===id);if(i<0)return;
+  LEADS.splice(i,1);dbSave();closeModal();renderLeads(curFilter);toast('✓ Lead eliminado');
+}
+function cv2(id){return (document.getElementById(id)||{}).value||'';}
 function setFilter(f,el){
   curFilter=f;
   document.querySelectorAll('#page-leads .filter-btn').forEach(b=>b.classList.remove('act'));
@@ -665,20 +764,37 @@ function setFilter(f,el){
 function filterLeads(q){renderLeads(curFilter,q.toLowerCase());}
 
 function renderPipeline(){
-  document.getElementById('kanban-board').innerHTML=PIPE_COLS.map(col=>{
+  document.getElementById('kanban-board').innerHTML=PIPE_COLS.map((col,ci)=>{
     const total=col.items.reduce((a,i)=>a+parseInt(i.p.replace(/[^\d]/g,''),10),0);
     return `<div class="kb-col">
       <div class="kb-col-hdr">
         <div class="kbc-label" style="color:${col.color}">${col.label}</div>
         <div class="kbc-meta">${col.items.length} oportunidades · ${total.toLocaleString('es-ES')} €</div>
       </div>
-      <div class="kb-cards">${col.items.map(i=>`<div class="kb-card" style="border-left:3px solid ${col.color}">
+      <div class="kb-cards" data-ci="${ci}" ondragover="event.preventDefault();this.classList.add('drop-hover')" ondragleave="this.classList.remove('drop-hover')" ondrop="kbDrop(event,${ci})">${col.items.map((i,ii)=>`<div class="kb-card" draggable="true" ondragstart="kbDragStart(event,${ci},${ii})" ondragend="this.classList.remove('dragging')" style="border-left:3px solid ${col.color}">
         <div class="kb-cname">${i.n}</div><div class="kb-cmodel">${i.m}</div>
         <div class="kb-cprice" style="color:${col.color}">${i.p}</div>
         <div class="kb-cdays">${i.d>0?i.d+' días en esta etapa':'Entrega hoy'}</div>
       </div>`).join('')}</div>
     </div>`;
   }).join('');
+}
+let _kbDrag=null;
+function kbDragStart(e,ci,ii){
+  _kbDrag={ci,ii};
+  e.target.classList.add('dragging');
+  e.dataTransfer.effectAllowed='move';
+}
+function kbDrop(e,destCi){
+  e.preventDefault();
+  document.querySelectorAll('.kb-cards').forEach(el=>el.classList.remove('drop-hover'));
+  if(!_kbDrag)return;
+  const {ci:srcCi,ii:srcIi}=_kbDrag;_kbDrag=null;
+  if(srcCi===destCi)return;
+  const [item]=PIPE_COLS[srcCi].items.splice(srcIi,1);
+  item.d=0;
+  PIPE_COLS[destCi].items.push(item);
+  dbSave();renderPipeline();toast('✓ Movido a "'+PIPE_COLS[destCi].label+'"');
 }
 
 function renderClientes(){
@@ -689,6 +805,25 @@ function renderClientes(){
     <td class="${c.e==='vencida'?'d-danger':''}">${c.r}</td>
     <td><span class="badge b-${c.e}">${c.e==='vencida'?'Rev. Vencida':'Activo'}</span></td>
   </tr>`).join('');
+  const total=CLIENTES.reduce((a,c)=>a+parseInt(String(c.p).replace(/[^\d]/g,''),10),0);
+  document.querySelector('#page-clientes .cli-footer-val').textContent=total.toLocaleString('es-ES')+' €';
+}
+function openNuevoCliente(){
+  openModal('+ Nuevo cliente',`
+    ${fGrp('Nombre','nc-n')}
+    ${fGrp('Vehículo comprado','nc-v')}
+    ${fGrp('Fecha de compra','nc-f','date')}
+    ${fGrp('Precio (€)','nc-p','number')}
+  `,`<button class="btn btn-outline btn-sm" onclick="closeModal()">Cancelar</button><button class="btn btn-navy btn-sm" onclick="saveNuevoCliente()">Guardar</button>`);
+}
+function saveNuevoCliente(){
+  const n=cv2('nc-n').trim();
+  if(!n){toast('⚠ Falta el nombre del cliente');return;}
+  const fRaw=cv2('nc-f');
+  const f=fRaw?new Date(fRaw+'T12:00:00').toLocaleDateString('es-ES'):'—';
+  const rev=fRaw?new Date(new Date(fRaw+'T12:00:00').setFullYear(new Date(fRaw).getFullYear()+1)).toLocaleDateString('es-ES'):'—';
+  CLIENTES.unshift({id:nextId++,n,v:cv2('nc-v')||'—',f,p:(+cv2('nc-p')||0).toLocaleString('es-ES')+' €',r:rev,e:'activo'});
+  dbSave();closeModal();renderClientes();toast('✓ Cliente creado');
 }
 
 let curInvFilter='todos';
@@ -700,6 +835,13 @@ function renderInv(f){
     <td style="font-weight:700;color:var(--navy)">${v.pr}</td>
     <td style="color:var(--text3);font-size:12px">${v.ma}</td>
     <td><span class="badge b-${v.es}">${v.es.charAt(0).toUpperCase()+v.es.slice(1)}</span></td>
+    <td>
+      <select onchange="cambiarEstadoVehiculo(${v.id},this.value)" style="font-size:11px;padding:4px 6px;border:1px solid var(--border2);border-radius:4px;">
+        <option value="disponible" ${v.es==='disponible'?'selected':''}>Disponible</option>
+        <option value="reservado" ${v.es==='reservado'?'selected':''}>Reservado</option>
+        <option value="vendido" ${v.es==='vendido'?'selected':''}>Vendido</option>
+      </select>
+    </td>
   </tr>`).join('');
   const disp=INV.filter(v=>v.es==='disponible').length;
   const res=INV.filter(v=>v.es==='reservado').length;
@@ -716,12 +858,31 @@ function setInvFilter(f,el){
   document.querySelectorAll('#page-inventario .filter-btn').forEach(b=>b.classList.remove('act'));
   el.classList.add('act');renderInv(f);
 }
+function cambiarEstadoVehiculo(id,nuevoEstado){
+  const v=INV.find(x=>x.id===id);if(!v)return;
+  v.es=nuevoEstado;dbSave();renderInv(curInvFilter);toast('✓ Estado actualizado');
+}
+function openNuevoVehiculo(){
+  openModal('+ Añadir vehículo',`
+    ${fGrp('Modelo','nv-mo')}
+    ${fGrp('Versión','nv-ve')}
+    ${fGrp('Color','nv-co')}
+    ${fGrp('Precio (€)','nv-pr','number')}
+    ${fGrp('Matrícula','nv-ma')}
+  `,`<button class="btn btn-outline btn-sm" onclick="closeModal()">Cancelar</button><button class="btn btn-navy btn-sm" onclick="saveNuevoVehiculo()">Guardar</button>`);
+}
+function saveNuevoVehiculo(){
+  const mo=cv2('nv-mo').trim();
+  if(!mo){toast('⚠ Falta el modelo');return;}
+  INV.unshift({id:nextId++,mo,ve:cv2('nv-ve')||'—',co:cv2('nv-co')||'—',pr:(+cv2('nv-pr')||0).toLocaleString('es-ES')+' €',ma:cv2('nv-ma')||'—',es:'disponible'});
+  dbSave();closeModal();renderInv(curInvFilter);toast('✓ Vehículo añadido al stock');
+}
 
 function renderSeg(){
-  document.getElementById('seg-content').innerHTML=SEG.map(g=>`
+  document.getElementById('seg-content').innerHTML=SEG.map((g,gi)=>`
     <div class="seg-group">
       <div class="seg-ghdr">${g.g}</div>
-      ${g.items.map(i=>`<div class="seg-item">
+      ${g.items.map((i,ii)=>`<div class="seg-item" style="${i.hecho?'opacity:.5;':''}">
         <div class="seg-date"><div class="seg-day">${i.d}</div><div class="seg-mon">${i.m}</div></div>
         <div class="seg-div"></div>
         <div class="seg-info">
@@ -729,9 +890,30 @@ function renderSeg(){
           <div class="seg-action">${i.a}</div>
           <div class="seg-time">🕐 ${i.h} &nbsp;·&nbsp; <span class="prio prio-${i.p}">${i.p.charAt(0).toUpperCase()+i.p.slice(1)}</span></div>
         </div>
-        <button class="btn btn-outline btn-xs" onclick="this.textContent='✓ Hecho';this.style.color='var(--green)';this.style.borderColor='var(--green)'">Marcar hecho</button>
+        ${i.hecho?`<span style="font-size:12px;color:var(--green);font-weight:700;">✓ Hecho</span>`:`<button class="btn btn-outline btn-xs" onclick="marcarSegHecho(${gi},${ii})">Marcar hecho</button>`}
       </div>`).join('')}
     </div>`).join('');
+}
+function marcarSegHecho(gi,ii){
+  const it=SEG[gi]&&SEG[gi].items[ii];if(!it)return;
+  it.hecho=true;dbSave();renderSeg();toast('✓ Seguimiento completado');
+}
+function openNuevoSeguimiento(){
+  openModal('+ Nuevo seguimiento',`
+    ${fGrp('Nombre del cliente','ns-n')}
+    ${fGrp('Acción a realizar','ns-a','textarea')}
+    ${fRowGrp(fGrp('Día del mes','ns-d','number'),fGrp('Mes (abrev.)','ns-m',null,'jul'))}
+    ${fRowGrp(fGrp('Hora','ns-h','time'),fSelGrp('Prioridad','ns-p',[{v:'alta',l:'Alta'},{v:'media',l:'Media'},{v:'baja',l:'Baja'}],'media'))}
+  `,`<button class="btn btn-outline btn-sm" onclick="closeModal()">Cancelar</button><button class="btn btn-navy btn-sm" onclick="saveNuevoSeguimiento()">Guardar</button>`);
+}
+function fRowGrp(a,b){return `<div class="f-row2">${a}${b}</div>`;}
+function saveNuevoSeguimiento(){
+  const n=cv2('ns-n').trim();
+  if(!n){toast('⚠ Falta el nombre del cliente');return;}
+  let grupo=SEG.find(g=>g.g==='Añadidos manualmente');
+  if(!grupo){grupo={g:'Añadidos manualmente',items:[]};SEG.unshift(grupo);}
+  grupo.items.push({d:cv2('ns-d')||'—',m:cv2('ns-m')||'',n,a:cv2('ns-a')||'',h:cv2('ns-h')||'—',p:cv2('ns-p')});
+  dbSave();closeModal();renderSeg();toast('✓ Seguimiento añadido');
 }
 
 function renderChart(){
@@ -783,6 +965,24 @@ function tNext(){if(tStep<TSTEPS.length-1){tStep++;showTStep();}else endTour();}
 function tPrev(){if(tStep>0){tStep--;showTStep();}}
 function endTour(){document.getElementById('tour-overlay').style.display='none';document.getElementById('tour-overlay').classList.remove('active');}
 
+// RESTAURAR DATOS GUARDADOS (o asignar ids a los datos de ejemplo la primera vez)
+(function initDB(){
+  [LEADS,CLIENTES,INV,FACT].forEach(arr=>arr.forEach(x=>{if(x.id==null)x.id=nextId++;}));
+  const saved=dbLoad();
+  if(saved){
+    if(saved.leads){LEADS.length=0;LEADS.push(...saved.leads);}
+    if(saved.clientes){CLIENTES.length=0;CLIENTES.push(...saved.clientes);}
+    if(saved.inv){INV.length=0;INV.push(...saved.inv);}
+    if(saved.fact){FACT.length=0;FACT.push(...saved.fact);}
+    if(saved.seg){SEG.length=0;SEG.push(...saved.seg);}
+    if(saved.pipe){PIPE_COLS.length=0;PIPE_COLS.push(...saved.pipe);}
+    const maxId=Math.max(0,...[LEADS,CLIENTES,INV,FACT].flat().map(x=>x.id||0));
+    nextId=maxId+1;
+  } else {
+    dbSave();
+  }
+})();
+
 // INIT
 setDate();
 renderLeads('todos');
@@ -793,7 +993,10 @@ renderSeg();
 renderFact('todos');
 renderMargen();
 setTimeout(renderChart,100);
-setTimeout(startTour,1200);
+if(!localStorage.getItem('carhaus_tour_visto')){
+  localStorage.setItem('carhaus_tour_visto','1');
+  setTimeout(startTour,1200);
+}
 </script>
 </body>
 </html>
