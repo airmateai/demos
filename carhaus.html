@@ -212,6 +212,27 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 
 @media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(2,1fr);}.kanban{grid-template-columns:repeat(2,1fr);}.obj-grid{grid-template-columns:1fr 1fr;}.inv-summary{grid-template-columns:1fr 1fr;}}
 @media(max-width:768px){#sidebar{display:none;}.kpi-grid{grid-template-columns:1fr 1fr;}.two-col{grid-template-columns:1fr;}}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(15,26,48,.55);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.open{display:flex;}
+.modal-box{background:var(--white);border-radius:var(--r);width:100%;max-width:480px;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow2);}
+.modal-hdr{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.modal-hdr h3{font-family:'Playfair Display',serif;font-size:17px;color:var(--navy3);}
+.modal-x{background:none;border:none;font-size:18px;color:var(--text3);cursor:pointer;line-height:1;}
+.modal-bd{padding:20px 22px;}
+.modal-ft{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
+.f-grp{margin-bottom:14px;}
+.f-grp label{display:block;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+.f-grp input,.f-grp select,.f-grp textarea{width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:var(--r2);font-size:13px;font-family:'Inter',sans-serif;background:var(--white);color:var(--text);}
+.f-grp input:focus,.f-grp select:focus,.f-grp textarea:focus{outline:none;border-color:var(--navy);}
+.f-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.toast-wrap{position:fixed;bottom:24px;right:24px;z-index:3000;display:flex;flex-direction:column;gap:8px;}
+.toast{background:var(--navy3);color:#fff;padding:11px 18px;border-radius:var(--r2);font-size:13px;box-shadow:var(--shadow2);animation:toastIn .25s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.kb-card{cursor:grab;}
+.kb-card.dragging{opacity:.4;}
+.kb-cards.drop-hover{background:var(--blue-bg);}
 </style>
 </head>
 <body>
@@ -437,7 +458,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 </div><!-- /layout -->
 
 <!-- TOUR -->
-<div id="tour-overlay">
+<div id="tour-overlay" onclick="if(event.target===this)endTour()">
   <div id="tour-spotlight"></div>
   <div id="tour-box">
     <div class="t-step" id="t-step">Paso 1 de 3</div>
@@ -752,12 +773,15 @@ function showTStep(){
     const box=document.getElementById('tour-box');
     let top=r.bottom+16;
     if(top+220>window.innerHeight)top=r.top-240;
-    box.style.cssText=`top:${Math.max(10,top)}px;left:${Math.min(r.left,window.innerWidth-350)}px;`;
+    // nunca debajo de la topbar (60px) ni pegado al borde inferior, para que el boton
+    // "Siguiente" siempre quede visible y pulsable
+    top=Math.max(70,Math.min(top,window.innerHeight-230));
+    box.style.cssText=`top:${top}px;left:${Math.min(Math.max(10,r.left),window.innerWidth-350)}px;`;
   },350);
 }
 function tNext(){if(tStep<TSTEPS.length-1){tStep++;showTStep();}else endTour();}
 function tPrev(){if(tStep>0){tStep--;showTStep();}}
-function endTour(){document.getElementById('tour-overlay').style.display='none';}
+function endTour(){document.getElementById('tour-overlay').style.display='none';document.getElementById('tour-overlay').classList.remove('active');}
 
 // INIT
 setDate();
